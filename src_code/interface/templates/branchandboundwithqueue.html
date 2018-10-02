@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>AlgoCompare</title>
+
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/fzavicon.ico') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/font-awesome.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}" >
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/customdynamic.css') }}" >
+    <link href="https://fonts.googleapis.com/css?family=Droid+Serif:400,400i,700,700i|Montserrat:200,200i,300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+</head>
+<body>
+<section class="cover-5 text-center">
+    <nav class="navbar navbar-expand-lg navbar-light navbar-custom">
+        <div class="container">
+            <a class="navbar-brand" href="/">AlgoCompareED</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse pull-xs-right justify-content-end" id="navbarSupportedContent">
+                <ul class="navbar-nav mt-2 mt-md-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dynamic</a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="/dynamic">With Traceback Matrix</a>
+                            <a class="dropdown-item" href="/dynamicwithouttraceback">Without Traceback Matrix</a>
+                            <!--<a class="dropdown-item" href="/dynamicalternative">Levenshtein Distance</a>-->
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Greedy</a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="/greedy">Fast Approach</a>
+                            <a class="dropdown-item" href="/greedyalternative">LCS Approach</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">D & C</a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="/divideandconquer">D & C v1</a>
+                            <a class="dropdown-item" href="/divideandconquer2">D & C v2</a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/stripek">Stripe</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="recursive">Recursive</a>
+                    </li>
+                    <li class="nav-item dropdown active">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">B & B</a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="/branchandboundwithpath">B&B Path</a>
+                            <a class="dropdown-item" href="/branchandboundwithqueue">B&B Queue</a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/proteindb">Protein Database</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="cover-container pb-5 ">
+        <div class="container">
+            <div class="divider"></div>
+            <h3>Edit Distance - Branch and Bound</h3>
+            <div class="divider"></div>
+            <p class="lead ">Queue Approach</p>
+        </div>
+        <div class="container">
+
+            {% if str_A and str_B %}
+            <h5 class="mt-2 mb-4">Algorithm Results for:</h5>
+            {% else %}
+            <h5 class="mt-2 mb-4">Enter two strings below:</h5>
+            {% endif %}
+
+            <form class="submission">
+
+                {% if str_A and str_B %}
+                <table style="border-collapse: collapse;">
+                    <col width="35%">
+                    <col width="5%">
+                    <col width="35%">
+                    <col width="15%">
+
+                    <tr>
+                        <td>
+
+                            <input id="str_A" class="form-control-custom" name="str_A" size="30" type="text" value="{{ str_A }}" disabled/>
+
+                        </td>
+                        <td></td>
+                        <td>
+
+                            <input id="str_B" class="form-control-custom" name="str_B" size="30" type="text" value="{{ str_B }}" disabled/>
+
+                        </td>
+                        <td>
+
+                            <div class="col-sm-4" style=" width: 100%;margin: 0 auto;">
+                                <button  id="calcbranchandboundwithqueueReset" class="btn btn-lg btn-outline-danger" >Reset</button>
+                            </div>
+
+                        </td>
+                    </tr>
+                </table>
+
+                {% else %}
+
+                <table style="border-collapse: collapse;">
+                    <col width="35%">
+                    <col width="5%">
+                    <col width="35%">
+                    <col width="15%">
+                    <tr>
+                        <td>
+
+                            <input id="str_A" class="form-control-custom" name="str_A" size="30" type="text" placeholder="1st String" required/>
+
+                        </td>
+                        <td></td>
+                        <td>
+                            <input id="str_B" class="form-control-custom" name="str_B" size="30" type="text" placeholder="2nd String" required/>
+                        </td>
+                        <td>
+                            <div class="col-sm-4" style=" width: 50%;margin: 0 auto;">
+                                <button type="submit" id="calcbranchandboundwithqueue" class="btn btn-lg btn-outline-success">Calculate Edit Distance</button>
+                            </div>
+                        </td>
+                    </tr>
+
+
+                </table>
+
+                <div id="errormsgdynamic" class="alert alert-danger" style="margin-top:50px;width:100%;display:none;">
+                    <b>Inputs cannot be empty!</b>
+                </div>
+
+
+                {% endif %}
+
+            </form>
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+        </div>
+        {% if str_A and str_B %}
+        <div class="container">
+
+            <h3>String Alignment</h3>
+            <div class="divider"></div>
+            <div>
+                <table class="table table-bordered table-striped table-dark font-weight-bold">
+                    <tr>
+                        {% for itema in newA %}
+                        <td>{{ itema }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        {% for itemb in newB %}
+                        <td>{{ itemb }}</td>
+                        {% endfor %}
+                    </tr>
+                </table>
+            </div>
+            <br>
+            <br>
+
+
+            <h3>Details of Result</h3>
+            <div class="divider"></div>
+
+            <div class="row">
+                <div class="col-md-4 col-feature">
+                    <div class="rounded-circle justify-center">
+                        <em class="fa fa-2x fa-clock-o"></em>
+                    </div>
+                    <h4>Time Complexity</h4>
+                    <p><h3><b>0</b>(2<sup>n</sup>)</h3></p>
+                </div>
+                <div class="col-md-4 col-feature">
+                    <div class="rounded-circle justify-center">
+                        <em class="fa fa-2x fa-compass"></em>
+                    </div>
+                    <h4>Edit Distance</h4>
+                    <p><h3>{{edInt}}</h3></p>
+                </div>
+                <div class="col-md-4 col-feature">
+                    <div class="rounded-circle justify-center">
+                        <em class="fa fa-2x fa-code"></em>
+                    </div>
+                    <h4>Optimality</h4>
+                    <p><h3>Optimal</h3></p>
+                </div>
+            </div>
+
+
+
+            <br>
+            <br>
+            <h3>Code (Python)</h3>
+            <div class="divider"></div>
+
+
+            <div style="text-align:left!important">
+<pre style='color:#d1d1d1;background:#000000;'><span style='color:#e66170; font-weight:bold; '>import</span> numpy <span style='color:#e66170; font-weight:bold; '>as</span> np
+<span style='color:#e66170; font-weight:bold; '>import</span> datetime <span style='color:#e66170; font-weight:bold; '>as</span> d
+<span style='color:#e66170; font-weight:bold; '>import</span> math
+<span style='color:#e66170; font-weight:bold; '>import</span> queue
+<span style='color:#e66170; font-weight:bold; '>import</span> time
+<span style='color:#e66170; font-weight:bold; '>from</span> random <span style='color:#e66170; font-weight:bold; '>import</span> randint
+<span style='color:#e66170; font-weight:bold; '>import</span> matplotlib<span style='color:#d2cd86; '>.</span>pyplot <span style='color:#e66170; font-weight:bold; '>as</span> plt
+
+
+<span style='color:#e66170; font-weight:bold; '>class</span> Node<span style='color:#d2cd86; '>:</span>
+    <span style='color:#e66170; font-weight:bold; '>def</span> __init__<span style='color:#d2cd86; '>(</span>self<span style='color:#d2cd86; '>,</span> A<span style='color:#d2cd86; '>,</span> B<span style='color:#d2cd86; '>,</span> cost<span style='color:#d2cd86; '>)</span><span style='color:#d2cd86; '>:</span>
+        self<span style='color:#d2cd86; '>.</span>A <span style='color:#d2cd86; '>=</span> A
+        self<span style='color:#d2cd86; '>.</span>B <span style='color:#d2cd86; '>=</span> B
+        self<span style='color:#d2cd86; '>.</span>cost <span style='color:#d2cd86; '>=</span> cost
+        self<span style='color:#d2cd86; '>.</span>h <span style='color:#d2cd86; '>=</span> heuristic<span style='color:#d2cd86; '>(</span>self<span style='color:#d2cd86; '>.</span>A<span style='color:#d2cd86; '>,</span> self<span style='color:#d2cd86; '>.</span>B<span style='color:#d2cd86; '>)</span>
+        self<span style='color:#d2cd86; '>.</span>f <span style='color:#d2cd86; '>=</span> self<span style='color:#d2cd86; '>.</span>cost <span style='color:#00dddd; '>+</span> self<span style='color:#d2cd86; '>.</span>h
+        self<span style='color:#d2cd86; '>.</span>path <span style='color:#d2cd86; '>=</span> <span style='color:#00c4c4; '>''</span>
+
+
+<span style='color:#e66170; font-weight:bold; '>def</span> heuristic<span style='color:#d2cd86; '>(</span>A<span style='color:#d2cd86; '>,</span> B<span style='color:#d2cd86; '>)</span><span style='color:#d2cd86; '>:</span>
+    <span style='color:#e66170; font-weight:bold; '>return</span> <span style='color:#d2cd86; '>(</span><span style='color:#e66170; font-weight:bold; '>abs</span><span style='color:#d2cd86; '>(</span><span style='color:#e66170; font-weight:bold; '>len</span><span style='color:#d2cd86; '>(</span>A<span style='color:#d2cd86; '>)</span> <span style='color:#00dddd; '>-</span> <span style='color:#e66170; font-weight:bold; '>len</span><span style='color:#d2cd86; '>(</span>B<span style='color:#d2cd86; '>)</span><span style='color:#d2cd86; '>)</span><span style='color:#d2cd86; '>)</span>
+
+
+<span style='color:#e66170; font-weight:bold; '>def</span> Branch_and_Bound<span style='color:#d2cd86; '>(</span>A<span style='color:#d2cd86; '>,</span> B<span style='color:#d2cd86; '>)</span><span style='color:#d2cd86; '>:</span>
+    Q <span style='color:#d2cd86; '>=</span> queue<span style='color:#d2cd86; '>.</span>LifoQueue<span style='color:#d2cd86; '>(</span><span style='color:#d2cd86; '>)</span>
+    node0 <span style='color:#d2cd86; '>=</span> Node<span style='color:#d2cd86; '>(</span>A<span style='color:#d2cd86; '>,</span> B<span style='color:#d2cd86; '>,</span> <span style='color:#00a800; '>0</span><span style='color:#d2cd86; '>)</span>
+    bound <span style='color:#d2cd86; '>=</span> math<span style='color:#d2cd86; '>.</span>inf
+    Q<span style='color:#d2cd86; '>.</span>put<span style='color:#d2cd86; '>(</span>node0<span style='color:#d2cd86; '>)</span>
+    path <span style='color:#d2cd86; '>=</span> <span style='color:#00c4c4; '>''</span>
+
+    <span style='color:#e66170; font-weight:bold; '>while</span> <span style='color:#d2cd86; '>(</span>Q<span style='color:#d2cd86; '>.</span>empty<span style='color:#d2cd86; '>(</span><span style='color:#d2cd86; '>)</span> <span style='color:#00dddd; '>==</span> False<span style='color:#d2cd86; '>)</span><span style='color:#d2cd86; '>:</span>
+        node <span style='color:#d2cd86; '>=</span> Q<span style='color:#d2cd86; '>.</span>get<span style='color:#d2cd86; '>(</span><span style='color:#d2cd86; '>)</span>
+
+        <span style='color:#9999a9; '># if the node can be expanded:</span>
+        <span style='color:#e66170; font-weight:bold; '>if</span> <span style='color:#d2cd86; '>(</span><span style='color:#e66170; font-weight:bold; '>len</span><span style='color:#d2cd86; '>(</span>node<span style='color:#d2cd86; '>.</span>A<span style='color:#d2cd86; '>)</span> <span style='color:#00dddd; '>!=</span> <span style='color:#00a800; '>0</span> <span style='color:#e66170; font-weight:bold; '>and</span> <span style='color:#e66170; font-weight:bold; '>len</span><span style='color:#d2cd86; '>(</span>node<span style='color:#d2cd86; '>.</span>B<span style='color:#d2cd86; '>)</span> <span style='color:#00dddd; '>!=</span> <span style='color:#00a800; '>0</span><span style='color:#d2cd86; '>)</span><span style='color:#d2cd86; '>:</span>
+            <span style='color:#9999a9; '># expand to three new nodes</span>
+            diff <span style='color:#d2cd86; '>=</span> <span style='color:#00a800; '>0</span> <span style='color:#e66170; font-weight:bold; '>if</span> node<span style='color:#d2cd86; '>.</span>A<span style='color:#d2cd86; '>[</span><span style='color:#00dddd; '>-</span><span style='color:#00a800; '>1</span><span style='color:#d2cd86; '>]</span> <span style='color:#00dddd; '>==</span> node<span style='color:#d2cd86; '>.</span>B<span style='color:#d2cd86; '>[</span><span style='color:#00dddd; '>-</span><span style='color:#00a800; '>1</span><span style='color:#d2cd86; '>]</span> <span style='color:#e66170; font-weight:bold; '>else</span> <span style='color:#00a800; '>1</span>
+            nextNodes <span style='color:#d2cd86; '>=</span> <span style='color:#d2cd86; '>[</span><span style='color:#d2cd86; '>]</span>
+            nextNodes<span style='color:#d2cd86; '>.</span>append<span style='color:#d2cd86; '>(</span>Node<span style='color:#d2cd86; '>(</span>node<span style='color:#d2cd86; '>.</span>A<span style='color:#d2cd86; '>[</span><span style='color:#d2cd86; '>:</span><span style='color:#00dddd; '>-</span><span style='color:#00a800; '>1</span><span style='color:#d2cd86; '>]</span><span style='color:#d2cd86; '>,</span> node<span style='color:#d2cd86; '>.</span>B<span style='color:#d2cd86; '>,</span> node<span style='color:#d2cd86; '>.</span>cost <span style='color:#00dddd; '>+</span> <span style='color:#00a800; '>1</span><span style='color:#d2cd86; '>)</span><span style='color:#d2cd86; '>)</span>
+            nextNodes<span style='color:#d2cd86; '>.</span>append<span style='color:#d2cd86; '>(</span>Node<span style='color:#d2cd86; '>(</span>node<span style='color:#d2cd86; '>.</span>A<span style='color:#d2cd86; '>,</span> node<span style='color:#d2cd86; '>.</span>B<span style='color:#d2cd86; '>[</span><span style='color:#d2cd86; '>:</span><span style='color:#00dddd; '>-</span><span style='color:#00a800; '>1</span><span style='color:#d2cd86; '>]</span><span style='color:#d2cd86; '>,</span> node<span style='color:#d2cd86; '>.</span>cost <span style='color:#00dddd; '>+</span> <span style='color:#00a800; '>1</span><span style='color:#d2cd86; '>)</span><span style='color:#d2cd86; '>)</span>
+            nextNodes<span style='color:#d2cd86; '>.</span>append<span style='color:#d2cd86; '>(</span>Node<span style='color:#d2cd86; '>(</span>node<span style='color:#d2cd86; '>.</span>A<span style='color:#d2cd86; '>[</span><span style='color:#d2cd86; '>:</span><span style='color:#00dddd; '>-</span><span style='color:#00a800; '>1</span><span style='color:#d2cd86; '>]</span><span style='color:#d2cd86; '>,</span> node<span style='color:#d2cd86; '>.</span>B<span style='color:#d2cd86; '>[</span><span style='color:#d2cd86; '>:</span><span style='color:#00dddd; '>-</span><span style='color:#00a800; '>1</span><span style='color:#d2cd86; '>]</span><span style='color:#d2cd86; '>,</span> node<span style='color:#d2cd86; '>.</span>cost <span style='color:#00dddd; '>+</span> diff<span style='color:#d2cd86; '>)</span><span style='color:#d2cd86; '>)</span>
+            <span style='color:#9999a9; '># update the path of nodes</span>
+            nextNodes<span style='color:#d2cd86; '>[</span><span style='color:#00a800; '>0</span><span style='color:#d2cd86; '>]</span><span style='color:#d2cd86; '>.</span>path <span style='color:#d2cd86; '>=</span> node<span style='color:#d2cd86; '>.</span>path <span style='color:#00dddd; '>+</span> <span style='color:#00c4c4; '>'U'</span>
+            nextNodes<span style='color:#d2cd86; '>[</span><span style='color:#00a800; '>1</span><span style='color:#d2cd86; '>]</span><span style='color:#d2cd86; '>.</span>path <span style='color:#d2cd86; '>=</span> node<span style='color:#d2cd86; '>.</span>path <span style='color:#00dddd; '>+</span> <span style='color:#00c4c4; '>'L'</span>
+            nextNodes<span style='color:#d2cd86; '>[</span><span style='color:#00a800; '>2</span><span style='color:#d2cd86; '>]</span><span style='color:#d2cd86; '>.</span>path <span style='color:#d2cd86; '>=</span> node<span style='color:#d2cd86; '>.</span>path <span style='color:#00dddd; '>+</span> <span style='color:#00c4c4; '>'D'</span>
+
+            <span style='color:#9999a9; '># if the value of node higher than the bound, so cutoff, otherwise put it into the queue to expande next time</span>
+            <span style='color:#e66170; font-weight:bold; '>for</span> _node <span style='color:#e66170; font-weight:bold; '>in</span> nextNodes<span style='color:#d2cd86; '>:</span>
+                <span style='color:#e66170; font-weight:bold; '>if</span> _node<span style='color:#d2cd86; '>.</span>f <span style='color:#00dddd; '>&lt;=</span> bound<span style='color:#d2cd86; '>:</span>
+                    Q<span style='color:#d2cd86; '>.</span>put<span style='color:#d2cd86; '>(</span>_node<span style='color:#d2cd86; '>)</span>
+
+        <span style='color:#9999a9; '># if solution is found, the node cannot be expanded:</span>
+        <span style='color:#e66170; font-weight:bold; '>elif</span> <span style='color:#d2cd86; '>(</span><span style='color:#e66170; font-weight:bold; '>len</span><span style='color:#d2cd86; '>(</span>node<span style='color:#d2cd86; '>.</span>A<span style='color:#d2cd86; '>)</span> <span style='color:#00dddd; '>==</span> <span style='color:#00a800; '>0</span> <span style='color:#e66170; font-weight:bold; '>or</span> <span style='color:#e66170; font-weight:bold; '>len</span><span style='color:#d2cd86; '>(</span>node<span style='color:#d2cd86; '>.</span>B<span style='color:#d2cd86; '>)</span> <span style='color:#00dddd; '>==</span> <span style='color:#00a800; '>0</span><span style='color:#d2cd86; '>)</span><span style='color:#d2cd86; '>:</span>
+            <span style='color:#9999a9; '># update the bound if higher than the value of the final node (solution),</span>
+            <span style='color:#9999a9; '># and also update the path leading the new solution</span>
+            <span style='color:#e66170; font-weight:bold; '>if</span> bound <span style='color:#00dddd; '>>=</span> node<span style='color:#d2cd86; '>.</span>f<span style='color:#d2cd86; '>:</span>
+                path <span style='color:#d2cd86; '>=</span> node<span style='color:#d2cd86; '>.</span>path <span style='color:#00dddd; '>+</span> <span style='color:#e66170; font-weight:bold; '>len</span><span style='color:#d2cd86; '>(</span>node<span style='color:#d2cd86; '>.</span>B<span style='color:#d2cd86; '>)</span> <span style='color:#00dddd; '>*</span> <span style='color:#00c4c4; '>'L'</span> <span style='color:#00dddd; '>+</span> <span style='color:#e66170; font-weight:bold; '>len</span><span style='color:#d2cd86; '>(</span>node<span style='color:#d2cd86; '>.</span>A<span style='color:#d2cd86; '>)</span> <span style='color:#00dddd; '>*</span> <span style='color:#00c4c4; '>'U'</span>
+                bound <span style='color:#d2cd86; '>=</span> node<span style='color:#d2cd86; '>.</span>f
+
+    _A<span style='color:#d2cd86; '>,</span> _B <span style='color:#d2cd86; '>=</span> alignment<span style='color:#d2cd86; '>(</span>A<span style='color:#d2cd86; '>,</span> B<span style='color:#d2cd86; '>,</span> None<span style='color:#d2cd86; '>,</span> path<span style='color:#d2cd86; '>)</span>
+    <span style='color:#e66170; font-weight:bold; '>return</span> bound<span style='color:#d2cd86; '>,</span> _A<span style='color:#d2cd86; '>,</span> _B
+
+
+<span style='color:#e66170; font-weight:bold; '>def</span> alignment<span style='color:#d2cd86; '>(</span>A<span style='color:#d2cd86; '>,</span> B<span style='color:#d2cd86; '>,</span> ptr<span style='color:#d2cd86; '>,</span> L<span style='color:#d2cd86; '>=</span>None<span style='color:#d2cd86; '>)</span><span style='color:#d2cd86; '>:</span>
+    <span style='color:#9999a9; '># create a trackback line</span>
+    <span style='color:#e66170; font-weight:bold; '>if</span> L <span style='color:#e66170; font-weight:bold; '>is</span> None<span style='color:#d2cd86; '>:</span>
+        L <span style='color:#d2cd86; '>=</span> <span style='color:#d2cd86; '>[</span><span style='color:#d2cd86; '>]</span>
+        row <span style='color:#d2cd86; '>=</span> ptr<span style='color:#d2cd86; '>.</span>shape<span style='color:#d2cd86; '>[</span><span style='color:#00a800; '>0</span><span style='color:#d2cd86; '>]</span> <span style='color:#00dddd; '>-</span> <span style='color:#00a800; '>1</span>
+        col <span style='color:#d2cd86; '>=</span> ptr<span style='color:#d2cd86; '>.</span>shape<span style='color:#d2cd86; '>[</span><span style='color:#00a800; '>1</span><span style='color:#d2cd86; '>]</span> <span style='color:#00dddd; '>-</span> <span style='color:#00a800; '>1</span>
+        <span style='color:#e66170; font-weight:bold; '>while</span> <span style='color:#d2cd86; '>(</span>row <span style='color:#00dddd; '>!=</span> <span style='color:#00a800; '>0</span> <span style='color:#e66170; font-weight:bold; '>or</span> col <span style='color:#00dddd; '>!=</span> <span style='color:#00a800; '>0</span><span style='color:#d2cd86; '>)</span><span style='color:#d2cd86; '>:</span>
+            <span style='color:#e66170; font-weight:bold; '>if</span> <span style='color:#d2cd86; '>(</span>ptr<span style='color:#d2cd86; '>[</span>row<span style='color:#d2cd86; '>,</span> col<span style='color:#d2cd86; '>]</span> <span style='color:#00dddd; '>==</span> <span style='color:#00a800; '>1</span><span style='color:#d2cd86; '>)</span> <span style='color:#e66170; font-weight:bold; '>or</span> <span style='color:#d2cd86; '>(</span>ptr<span style='color:#d2cd86; '>[</span>row<span style='color:#d2cd86; '>,</span> col<span style='color:#d2cd86; '>]</span> <span style='color:#00dddd; '>==</span> <span style='color:#00a800; '>7</span><span style='color:#d2cd86; '>)</span><span style='color:#d2cd86; '>:</span>
+                L<span style='color:#d2cd86; '>.</span>append<span style='color:#d2cd86; '>(</span><span style='color:#00c4c4; '>'D'</span><span style='color:#d2cd86; '>)</span>
+                row <span style='color:#d2cd86; '>=</span> row <span style='color:#00dddd; '>-</span> <span style='color:#00a800; '>1</span>
+                col <span style='color:#d2cd86; '>=</span> col <span style='color:#00dddd; '>-</span> <span style='color:#00a800; '>1</span>
+            <span style='color:#e66170; font-weight:bold; '>elif</span> <span style='color:#d2cd86; '>(</span>ptr<span style='color:#d2cd86; '>[</span>row<span style='color:#d2cd86; '>,</span> col<span style='color:#d2cd86; '>]</span> <span style='color:#00dddd; '>==</span> <span style='color:#00a800; '>4</span><span style='color:#d2cd86; '>)</span> <span style='color:#e66170; font-weight:bold; '>or</span> <span style='color:#d2cd86; '>(</span>ptr<span style='color:#d2cd86; '>[</span>row<span style='color:#d2cd86; '>,</span> col<span style='color:#d2cd86; '>]</span> <span style='color:#00dddd; '>==</span> <span style='color:#00a800; '>5</span><span style='color:#d2cd86; '>)</span> <span style='color:#e66170; font-weight:bold; '>or</span> <span style='color:#d2cd86; '>(</span>ptr<span style='color:#d2cd86; '>[</span>row<span style='color:#d2cd86; '>,</span> col<span style='color:#d2cd86; '>]</span> <span style='color:#00dddd; '>==</span> <span style='color:#00a800; '>6</span><span style='color:#d2cd86; '>)</span><span style='color:#d2cd86; '>:</span>
+                L<span style='color:#d2cd86; '>.</span>append<span style='color:#d2cd86; '>(</span><span style='color:#00c4c4; '>'U'</span><span style='color:#d2cd86; '>)</span>
+                row <span style='color:#d2cd86; '>=</span> row <span style='color:#00dddd; '>-</span> <span style='color:#00a800; '>1</span>
+            <span style='color:#e66170; font-weight:bold; '>elif</span> <span style='color:#d2cd86; '>(</span>ptr<span style='color:#d2cd86; '>[</span>row<span style='color:#d2cd86; '>,</span> col<span style='color:#d2cd86; '>]</span> <span style='color:#00dddd; '>==</span> <span style='color:#00a800; '>2</span><span style='color:#d2cd86; '>)</span> <span style='color:#e66170; font-weight:bold; '>or</span> <span style='color:#d2cd86; '>(</span>ptr<span style='color:#d2cd86; '>[</span>row<span style='color:#d2cd86; '>,</span> col<span style='color:#d2cd86; '>]</span> <span style='color:#00dddd; '>==</span> <span style='color:#00a800; '>3</span><span style='color:#d2cd86; '>)</span><span style='color:#d2cd86; '>:</span>
+                L<span style='color:#d2cd86; '>.</span>append<span style='color:#d2cd86; '>(</span><span style='color:#00c4c4; '>'L'</span><span style='color:#d2cd86; '>)</span>
+                col <span style='color:#d2cd86; '>=</span> col <span style='color:#00dddd; '>-</span> <span style='color:#00a800; '>1</span>
+            <span style='color:#e66170; font-weight:bold; '>else</span><span style='color:#d2cd86; '>:</span>
+                <span style='color:#e66170; font-weight:bold; '>print</span><span style='color:#d2cd86; '>(</span><span style='color:#00c4c4; '>"------ERROR----"</span><span style='color:#d2cd86; '>)</span>
+                <span style='color:#e66170; font-weight:bold; '>print</span><span style='color:#d2cd86; '>(</span><span style='color:#00c4c4; '>"ptr:</span><span style='color:#008080; '>\n</span><span style='color:#00c4c4; '>"</span><span style='color:#d2cd86; '>,</span> ptr<span style='color:#d2cd86; '>,</span> <span style='color:#00c4c4; '>"</span><span style='color:#008080; '>\n</span><span style='color:#00c4c4; '>where ptr="</span><span style='color:#d2cd86; '>,</span> ptr<span style='color:#d2cd86; '>[</span>row<span style='color:#d2cd86; '>,</span> col<span style='color:#d2cd86; '>]</span><span style='color:#d2cd86; '>,</span> <span style='color:#00c4c4; '>"row="</span><span style='color:#d2cd86; '>,</span> row<span style='color:#d2cd86; '>,</span> <span style='color:#00c4c4; '>"col="</span><span style='color:#d2cd86; '>,</span> col<span style='color:#d2cd86; '>)</span>
+                <span style='color:#e66170; font-weight:bold; '>return</span> <span style='color:#d2cd86; '>[</span><span style='color:#d2cd86; '>]</span><span style='color:#d2cd86; '>,</span> <span style='color:#d2cd86; '>[</span><span style='color:#d2cd86; '>]</span>
+
+
+                <span style='color:#9999a9; '># Update A and B with alignment</span>
+    A2 <span style='color:#d2cd86; '>=</span> <span style='color:#d2cd86; '>[</span><span style='color:#d2cd86; '>]</span>
+    B2 <span style='color:#d2cd86; '>=</span> <span style='color:#d2cd86; '>[</span><span style='color:#d2cd86; '>]</span>
+    k <span style='color:#d2cd86; '>=</span> <span style='color:#00a800; '>0</span>
+    h <span style='color:#d2cd86; '>=</span> <span style='color:#00a800; '>0</span>
+    <span style='color:#e66170; font-weight:bold; '>for</span> i <span style='color:#e66170; font-weight:bold; '>in</span> <span style='color:#e66170; font-weight:bold; '>range</span><span style='color:#d2cd86; '>(</span><span style='color:#e66170; font-weight:bold; '>len</span><span style='color:#d2cd86; '>(</span>L<span style='color:#d2cd86; '>)</span><span style='color:#d2cd86; '>,</span> <span style='color:#00a800; '>0</span><span style='color:#d2cd86; '>,</span> <span style='color:#00dddd; '>-</span><span style='color:#00a800; '>1</span><span style='color:#d2cd86; '>)</span><span style='color:#d2cd86; '>:</span>
+        <span style='color:#e66170; font-weight:bold; '>if</span> L<span style='color:#d2cd86; '>[</span>i <span style='color:#00dddd; '>-</span> <span style='color:#00a800; '>1</span><span style='color:#d2cd86; '>]</span> <span style='color:#00dddd; '>==</span> <span style='color:#00c4c4; '>'D'</span><span style='color:#d2cd86; '>:</span>
+            A2<span style='color:#d2cd86; '>.</span>append<span style='color:#d2cd86; '>(</span>A<span style='color:#d2cd86; '>[</span>k<span style='color:#d2cd86; '>]</span><span style='color:#d2cd86; '>)</span>
+            B2<span style='color:#d2cd86; '>.</span>append<span style='color:#d2cd86; '>(</span>B<span style='color:#d2cd86; '>[</span>h<span style='color:#d2cd86; '>]</span><span style='color:#d2cd86; '>)</span>
+            k <span style='color:#00dddd; '>+</span><span style='color:#d2cd86; '>=</span> <span style='color:#00a800; '>1</span>
+            h <span style='color:#00dddd; '>+</span><span style='color:#d2cd86; '>=</span> <span style='color:#00a800; '>1</span>
+        <span style='color:#e66170; font-weight:bold; '>elif</span> L<span style='color:#d2cd86; '>[</span>i <span style='color:#00dddd; '>-</span> <span style='color:#00a800; '>1</span><span style='color:#d2cd86; '>]</span> <span style='color:#00dddd; '>==</span> <span style='color:#00c4c4; '>'U'</span><span style='color:#d2cd86; '>:</span>
+            A2<span style='color:#d2cd86; '>.</span>append<span style='color:#d2cd86; '>(</span>A<span style='color:#d2cd86; '>[</span>k<span style='color:#d2cd86; '>]</span><span style='color:#d2cd86; '>)</span>
+            B2<span style='color:#d2cd86; '>.</span>append<span style='color:#d2cd86; '>(</span><span style='color:#00c4c4; '>'-'</span><span style='color:#d2cd86; '>)</span>
+            k <span style='color:#00dddd; '>+</span><span style='color:#d2cd86; '>=</span> <span style='color:#00a800; '>1</span>
+        <span style='color:#e66170; font-weight:bold; '>elif</span> L<span style='color:#d2cd86; '>[</span>i <span style='color:#00dddd; '>-</span> <span style='color:#00a800; '>1</span><span style='color:#d2cd86; '>]</span> <span style='color:#00dddd; '>==</span> <span style='color:#00c4c4; '>'L'</span><span style='color:#d2cd86; '>:</span>
+            A2<span style='color:#d2cd86; '>.</span>append<span style='color:#d2cd86; '>(</span><span style='color:#00c4c4; '>'-'</span><span style='color:#d2cd86; '>)</span>
+            B2<span style='color:#d2cd86; '>.</span>append<span style='color:#d2cd86; '>(</span>B<span style='color:#d2cd86; '>[</span>h<span style='color:#d2cd86; '>]</span><span style='color:#d2cd86; '>)</span>
+            h <span style='color:#00dddd; '>+</span><span style='color:#d2cd86; '>=</span> <span style='color:#00a800; '>1</span>
+
+    <span style='color:#e66170; font-weight:bold; '>return</span> A2<span style='color:#d2cd86; '>,</span> B2
+</pre>
+            </div>
+
+
+
+
+        </div>
+        {% endif %}
+    </div>
+
+
+
+</section>
+
+<footer class="footer-5">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 text-center text-md-left mt-2 mb-3 pt-1">
+                <p class="copyright">Copyright &copy; 2017 AlgoCompareED. All rights reserved.</p>
+            </div>
+
+        </div>
+    </div>
+</footer>
+
+<!--JS import-->
+<script src="{{ url_for('static', filename='js/jquery-3.1.1.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/tether.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/customjs.js') }}"></script>
+
+
+</body>
+</html>

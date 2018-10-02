@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>AlgoCompare</title>
+
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/fzavicon.ico') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/font-awesome.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}" >
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/customdynamic.css') }}" >
+    <link href="https://fonts.googleapis.com/css?family=Droid+Serif:400,400i,700,700i|Montserrat:200,200i,300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+</head>
+<body>
+<section class="cover-5 text-center">
+    <nav class="navbar navbar-expand-lg navbar-light navbar-custom">
+        <div class="container">
+            <a class="navbar-brand" href="/">AlgoCompareED</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse pull-xs-right justify-content-end" id="navbarSupportedContent">
+                <ul class="navbar-nav mt-2 mt-md-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dynamic</a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="/dynamic">With Traceback Matrix</a>
+                            <a class="dropdown-item" href="/dynamicwithouttraceback">Without Traceback Matrix</a>
+                            <!--<a class="dropdown-item" href="/dynamicalternative">Levenshtein Distance</a>-->
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Greedy</a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="/greedy">Fast Approach</a>
+                            <a class="dropdown-item" href="/greedyalternative">LCS Approach</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">D & C</a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="/divideandconquer">D & C v1</a>
+                            <a class="dropdown-item" href="/divideandconquer2">D & C v2</a>
+                        </div>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/stripek">Stripe</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/recursive">Recursive</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">B & B</a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="/branchandboundwithpath">B&B Path</a>
+                            <a class="dropdown-item" href="/branchandboundwithqueue">B&B Queue</a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/proteindb">Protein Database</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="cover-container pb-5 ">
+        <div class="container">
+            <div class="divider"></div>
+            <h3>Edit Distance - Stripe</h3>
+            <div class="divider"></div>
+            <p class="lead ">Stripe-K Approach</p>
+        </div>
+        <div class="container">
+
+            {% if str_A and str_B %}
+            <h5 class="mt-2 mb-4">Algorithm Results when k = {{ k }} for:</h5>
+            {% else %}
+            <h5 class="mt-2 mb-4">Enter two strings below:</h5>
+            {% endif %}
+
+            <form class="submission">
+
+                {% if str_A and str_B %}
+                <table style="border-collapse: collapse;">
+                    <col width="35%">
+                    <col width="5%">
+                    <col width="35%">
+                    <col width="15%">
+
+                    <tr>
+                        <td>
+
+                            <input id="str_A" class="form-control-custom" name="str_A" size="30" type="text" value="{{ str_A }}" disabled/>
+
+                        </td>
+                        <td></td>
+                        <td>
+
+                            <input id="str_B" class="form-control-custom" name="str_B" size="30" type="text" value="{{ str_B }}" disabled/>
+
+                        </td>
+                        <td>
+
+                            <div class="col-sm-4" style=" width: 100%;margin: 0 auto;">
+                                <button  id="calcstripekReset" class="btn btn-lg btn-outline-danger" >Reset</button>
+                            </div>
+
+                        </td>
+                    </tr>
+                </table>
+
+                {% else %}
+
+                <table style="border-collapse: collapse;">
+                    <col width="35%">
+                    <col width="5%">
+                    <col width="35%">
+                    <col width="15%">
+                    <tr>
+                        <td>
+
+                            <input id="str_A" class="form-control-custom" name="str_A" size="30" type="text" placeholder="1st String" required/>
+
+                        </td>
+                        <td></td>
+                        <td>
+                            <input id="str_B" class="form-control-custom" name="str_B" size="30" type="text" placeholder="2nd String" required/>
+                        </td>
+                        <td>
+                            <div class="col-sm-4" style=" width: 50%;margin: 0 auto;">
+                                <button type="submit" id="calcstripek" class="btn btn-lg btn-outline-success">Calculate Edit Distance</button>
+                            </div>
+                        </td>
+                    </tr>
+
+
+                </table>
+
+                <div id="errormsgdynamic" class="alert alert-danger" style="margin-top:50px;width:100%;display:none;">
+                    <b>Inputs cannot be empty!</b>
+                </div>
+
+
+                {% endif %}
+
+            </form>
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+        </div>
+        {% if str_A and str_B %}
+        <div class="container">
+
+            <h3>String Alignment</h3>
+            <div class="divider"></div>
+            <div>
+                <table class="table table-bordered table-striped table-dark font-weight-bold">
+                    <tr>
+                        {% for itema in newA %}
+                        <td>{{ itema }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        {% for itemb in newB %}
+                        <td>{{ itemb }}</td>
+                        {% endfor %}
+                    </tr>
+                </table>
+            </div>
+            <br>
+            <br>
+
+            <h3>Edit Distance Matrix</h3>
+			<div class="divider"></div>
+			<table class="table table-bordered" >
+
+				{% for item2 in EDI[0] %}
+				<col width="{{100/(EDI[0]|length+1)}}%">
+				{% endfor %}
+				<col width="{{100/(EDI[0]|length+1)}}%">
+				<tr>
+					<td></td>
+					<td>0</td>
+					{% for item3 in arr_B %}
+					<td>{{item3}}</td>
+					{% endfor %}
+				</tr>
+				{% for item4 in EDI %}
+				<tr>
+					{% if loop.index <2 %}
+					<td>0</td>
+					{% else %}
+					<td>{{arr_A[loop.index-2]}}</td>
+					{% endif %}
+
+					{% for item5 in item4 %}
+					<td>{{item5}}</td>
+					{% endfor %}
+				</tr>
+
+				{% endfor %}
+			</table>
+
+
+			<br>
+			<br>
+			<h3>TraceBack Matrix</h3>
+			<div class="divider"></div>
+			<table class="table table-bordered">
+
+				{% for item2 in PTR[0] %}
+				<col width="{{100/(EDI[0]|length+1)}}%">
+				{% endfor %}
+				<col width="{{100/(EDI[0]|length+1)}}%">
+				<tr>
+					<td></td>
+					<td>0</td>
+					{% for item3 in arr_B %}
+					<td>{{item3}}</td>
+					{% endfor %}
+				</tr>
+				{% for item4 in PTR %}
+				<tr>
+					{% if loop.index <2 %}
+					<td>0</td>
+					{% else %}
+					<td>{{arr_A[loop.index-2]}}</td>
+					{% endif %}
+
+					{% for item5 in item4 %}
+					<td>{{item5}}</td>
+					{% endfor %}
+				</tr>
+
+				{% endfor %}
+			</table>
+
+
+			<p class="lead ">Legend for Traceback Matrix:</p>
+			<table class="table table-striped table-bordered">
+				<tr>
+					<th class="tg-yw4l">Number</th>
+					<th class="tg-yw4l">Corresponding Move</th>
+				</tr>
+				<tr>
+					<td class="tg-yw4l">0:</td>
+					<td class="tg-yw4l">"&nbsp;&nbsp;&nbsp;"</td>
+				</tr>
+				<tr>
+					<td class="tg-yw4l">1:</td>
+					<td class="tg-yw4l">"<i class="fa fa-arrow-left fa-rotate-45" style="font-size:1.5em"></i>"</td>
+				</tr>
+				<tr>
+					<td class="tg-yw4l">2:</td>
+					<td class="tg-yw4l">"<i class="fa fa-arrow-left" style="font-size:1.5em"></i>"</td>
+				</tr>
+				<tr>
+					<td class="tg-yw4l">3:</td>
+					<td class="tg-yw4l">"<i class="fa fa-arrow-left fa-rotate-45" style="font-size:1.5em"></i><i class="fa fa-arrow-left" style="font-size:1.5em"></i>"</td>
+				</tr>
+				<tr>
+					<td class="tg-yw4l">4:</td>
+					<td class="tg-yw4l">"<i class="fa fa-arrow-up" style="font-size:1.5em"></i>"</td>
+				</tr>
+				<tr>
+					<td class="tg-yw4l">5:</td>
+					<td class="tg-yw4l">"<i class="fa fa-arrow-left fa-rotate-45" style="font-size:1.5em"></i><i class="fa fa-arrow-up" style="font-size:1.5em"></i>"</td>
+				</tr>
+				<tr>
+					<td class="tg-yw4l">6:</td>
+					<td class="tg-yw4l">"<i class="fa fa-arrow-left" style="font-size:1.5em"></i><i class="fa fa-arrow-up" style="font-size:1.5em"></i>"</td>
+				</tr>
+				<tr>
+					<td class="tg-yw4l">7:</td>
+					<td class="tg-yw4l">"<i class="fa fa-arrow-left fa-rotate-45" style="font-size:1.5em"></i><i class="fa fa-arrow-left" style="font-size:1.5em"></i><i class="fa fa-arrow-up" style="font-size:1.5em"></i>"</td>
+				</tr>
+			</table>
+			<br>
+			<br>
+
+            <h3>Details of Result</h3>
+            <div class="divider"></div>
+
+            <div class="row">
+                <div class="col-md-4 col-feature">
+                    <div class="rounded-circle justify-center">
+                        <em class="fa fa-2x fa-clock-o"></em>
+                    </div>
+                    <h4>Time Complexity</h4>
+                    <p><h3><b>0</b>(k*n)</h3></p>
+                </div>
+                <div class="col-md-4 col-feature">
+                    <div class="rounded-circle justify-center">
+                        <em class="fa fa-2x fa-compass"></em>
+                    </div>
+                    <h4>Edit Distance</h4>
+                    <p><h3>{{edInt}}</h3></p>
+                </div>
+                <div class="col-md-4 col-feature">
+                    <div class="rounded-circle justify-center">
+                        <em class="fa fa-2x fa-code"></em>
+                    </div>
+                    <h4>Optimality</h4>
+                    <p><h3>Not Optimal</h3></p>
+                </div>
+            </div>
+
+
+
+            <br>
+            <br>
+            <h3>Code (Python)</h3>
+            <div class="divider"></div>
+
+
+            <div style="text-align:left!important">
+<pre style='color:#d1d1d1;background:#000000;'><span style='color:#e66170; font-weight:bold; '>def</span> linear_space_Hirshberg<span style='color:#d2cd86; '>(</span>A<span style='color:#d2cd86; '>,</span> B<span style='color:#d2cd86; '>)</span><span style='color:#d2cd86; '>:</span>
+    n <span style='color:#d2cd86; '>=</span> <span style='color:#e66170; font-weight:bold; '>len</span><span style='color:#d2cd86; '>(</span>A<span style='color:#d2cd86; '>)</span>
+    m <span style='color:#d2cd86; '>=</span> <span style='color:#e66170; font-weight:bold; '>len</span><span style='color:#d2cd86; '>(</span>B<span style='color:#d2cd86; '>)</span>
+
+    <span style='color:#9999a9; '># position to divide String A</span>
+    h <span style='color:#d2cd86; '>=</span> <span style='color:#e66170; font-weight:bold; '>round</span><span style='color:#d2cd86; '>(</span>n <span style='color:#00dddd; '>/</span> <span style='color:#00a800; '>2</span><span style='color:#d2cd86; '>)</span>
+    <span style='color:#9999a9; '># init ED 1D array</span>
+    ED <span style='color:#d2cd86; '>=</span> np<span style='color:#d2cd86; '>.</span>zeros<span style='color:#d2cd86; '>(</span><span style='color:#d2cd86; '>(</span>m <span style='color:#00dddd; '>+</span> <span style='color:#00a800; '>1</span><span style='color:#d2cd86; '>)</span><span style='color:#d2cd86; '>,</span> dtype<span style='color:#d2cd86; '>=</span><span style='color:#00c4c4; '>'int32'</span><span style='color:#d2cd86; '>)</span>
+    <span style='color:#9999a9; '># init Hirshberg 1D array</span>
+    H <span style='color:#d2cd86; '>=</span> np<span style='color:#d2cd86; '>.</span>zeros<span style='color:#d2cd86; '>(</span><span style='color:#d2cd86; '>(</span>m <span style='color:#00dddd; '>+</span> <span style='color:#00a800; '>1</span><span style='color:#d2cd86; '>)</span><span style='color:#d2cd86; '>,</span> dtype<span style='color:#d2cd86; '>=</span><span style='color:#00c4c4; '>'int32'</span><span style='color:#d2cd86; '>)</span>
+
+    <span style='color:#e66170; font-weight:bold; '>for</span> j <span style='color:#e66170; font-weight:bold; '>in</span> <span style='color:#e66170; font-weight:bold; '>range</span><span style='color:#d2cd86; '>(</span>m <span style='color:#00dddd; '>+</span> <span style='color:#00a800; '>1</span><span style='color:#d2cd86; '>)</span><span style='color:#d2cd86; '>:</span>
+        ED<span style='color:#d2cd86; '>[</span>j<span style='color:#d2cd86; '>]</span> <span style='color:#d2cd86; '>=</span> j
+
+    <span style='color:#e66170; font-weight:bold; '>for</span> i <span style='color:#e66170; font-weight:bold; '>in</span> <span style='color:#e66170; font-weight:bold; '>range</span><span style='color:#d2cd86; '>(</span><span style='color:#00a800; '>1</span><span style='color:#d2cd86; '>,</span> n <span style='color:#00dddd; '>+</span> <span style='color:#00a800; '>1</span><span style='color:#d2cd86; '>)</span><span style='color:#d2cd86; '>:</span>
+        <span style='color:#9999a9; '># set up the left and Diagonal value of ED on each new row</span>
+        left <span style='color:#d2cd86; '>=</span> i
+        dag <span style='color:#d2cd86; '>=</span> i <span style='color:#00dddd; '>-</span> <span style='color:#00a800; '>1</span>
+        <span style='color:#9999a9; '># Left and Diagonal value of H on each new row</span>
+        H_left <span style='color:#d2cd86; '>=</span> <span style='color:#00a800; '>0</span>
+        H_dag <span style='color:#d2cd86; '>=</span> <span style='color:#00a800; '>0</span>
+        <span style='color:#e66170; font-weight:bold; '>for</span> j <span style='color:#e66170; font-weight:bold; '>in</span> <span style='color:#e66170; font-weight:bold; '>range</span><span style='color:#d2cd86; '>(</span><span style='color:#00a800; '>1</span><span style='color:#d2cd86; '>,</span> m <span style='color:#00dddd; '>+</span> <span style='color:#00a800; '>1</span><span style='color:#d2cd86; '>)</span><span style='color:#d2cd86; '>:</span>
+            <span style='color:#9999a9; '># Compute ED</span>
+            diff <span style='color:#d2cd86; '>=</span> <span style='color:#00a800; '>0</span> <span style='color:#e66170; font-weight:bold; '>if</span> A<span style='color:#d2cd86; '>[</span>i <span style='color:#00dddd; '>-</span> <span style='color:#00a800; '>1</span><span style='color:#d2cd86; '>]</span> <span style='color:#00dddd; '>==</span> B<span style='color:#d2cd86; '>[</span>j <span style='color:#00dddd; '>-</span> <span style='color:#00a800; '>1</span><span style='color:#d2cd86; '>]</span> <span style='color:#e66170; font-weight:bold; '>else</span> <span style='color:#00a800; '>1</span>
+            curr <span style='color:#d2cd86; '>=</span> <span style='color:#e66170; font-weight:bold; '>min</span><span style='color:#d2cd86; '>(</span>ED<span style='color:#d2cd86; '>[</span>j<span style='color:#d2cd86; '>]</span> <span style='color:#00dddd; '>+</span> <span style='color:#00a800; '>1</span><span style='color:#d2cd86; '>,</span> left <span style='color:#00dddd; '>+</span> <span style='color:#00a800; '>1</span><span style='color:#d2cd86; '>,</span> dag <span style='color:#00dddd; '>+</span> diff<span style='color:#d2cd86; '>)</span>
+            <span style='color:#9999a9; '># Compute Array 1D H thanks to result of ED</span>
+            <span style='color:#e66170; font-weight:bold; '>if</span> i <span style='color:#00dddd; '>==</span> h<span style='color:#d2cd86; '>:</span>
+                H<span style='color:#d2cd86; '>[</span>j<span style='color:#d2cd86; '>]</span> <span style='color:#d2cd86; '>=</span> j
+            <span style='color:#e66170; font-weight:bold; '>if</span> <span style='color:#d2cd86; '>(</span>i <span style='color:#00dddd; '>></span> h<span style='color:#d2cd86; '>)</span><span style='color:#d2cd86; '>:</span>
+                <span style='color:#e66170; font-weight:bold; '>if</span> <span style='color:#d2cd86; '>(</span>curr <span style='color:#00dddd; '>==</span> left <span style='color:#00dddd; '>+</span> <span style='color:#00a800; '>1</span><span style='color:#d2cd86; '>)</span><span style='color:#d2cd86; '>:</span>
+                    H_curr <span style='color:#d2cd86; '>=</span> H_left
+                <span style='color:#e66170; font-weight:bold; '>elif</span> <span style='color:#d2cd86; '>(</span>curr <span style='color:#00dddd; '>==</span> ED<span style='color:#d2cd86; '>[</span>j<span style='color:#d2cd86; '>]</span> <span style='color:#00dddd; '>+</span> <span style='color:#00a800; '>1</span><span style='color:#d2cd86; '>)</span><span style='color:#d2cd86; '>:</span>
+                    H_curr <span style='color:#d2cd86; '>=</span> H<span style='color:#d2cd86; '>[</span>j<span style='color:#d2cd86; '>]</span>
+                <span style='color:#e66170; font-weight:bold; '>else</span><span style='color:#d2cd86; '>:</span>
+                    H_curr <span style='color:#d2cd86; '>=</span> H_dag
+                <span style='color:#9999a9; '># Update new value of left, dag and curr</span>
+                H_left <span style='color:#d2cd86; '>=</span> H_curr
+                H_dag <span style='color:#d2cd86; '>=</span> H<span style='color:#d2cd86; '>[</span>j<span style='color:#d2cd86; '>]</span>
+                H<span style='color:#d2cd86; '>[</span>j<span style='color:#d2cd86; '>]</span> <span style='color:#d2cd86; '>=</span> H_curr
+            <span style='color:#9999a9; '># Update ED array</span>
+            left <span style='color:#d2cd86; '>=</span> curr
+            dag <span style='color:#d2cd86; '>=</span> ED<span style='color:#d2cd86; '>[</span>j<span style='color:#d2cd86; '>]</span>
+            ED<span style='color:#d2cd86; '>[</span>j<span style='color:#d2cd86; '>]</span> <span style='color:#d2cd86; '>=</span> curr
+
+    <span style='color:#e66170; font-weight:bold; '>return</span> np<span style='color:#d2cd86; '>.</span>array<span style='color:#d2cd86; '>(</span><span style='color:#d2cd86; '>[</span>h<span style='color:#d2cd86; '>,</span> H<span style='color:#d2cd86; '>[</span>m<span style='color:#d2cd86; '>]</span><span style='color:#d2cd86; '>]</span><span style='color:#d2cd86; '>,</span> dtype<span style='color:#d2cd86; '>=</span><span style='color:#00c4c4; '>'int32'</span><span style='color:#d2cd86; '>)</span>
+
+
+<span style='color:#e66170; font-weight:bold; '>def</span> Divide_and_Conquer_ED<span style='color:#d2cd86; '>(</span>A<span style='color:#d2cd86; '>,</span> B<span style='color:#d2cd86; '>,</span> newED<span style='color:#d2cd86; '>=</span>None<span style='color:#d2cd86; '>,</span> newA<span style='color:#d2cd86; '>=</span>None<span style='color:#d2cd86; '>,</span> newB<span style='color:#d2cd86; '>=</span>None<span style='color:#d2cd86; '>)</span><span style='color:#d2cd86; '>:</span>
+    n <span style='color:#d2cd86; '>=</span> <span style='color:#e66170; font-weight:bold; '>len</span><span style='color:#d2cd86; '>(</span>A<span style='color:#d2cd86; '>)</span>
+    m <span style='color:#d2cd86; '>=</span> <span style='color:#e66170; font-weight:bold; '>len</span><span style='color:#d2cd86; '>(</span>B<span style='color:#d2cd86; '>)</span>
+
+    <span style='color:#9999a9; '># global lists:</span>
+    <span style='color:#e66170; font-weight:bold; '>if</span> newED <span style='color:#e66170; font-weight:bold; '>is</span> None<span style='color:#d2cd86; '>:</span>
+        newED <span style='color:#d2cd86; '>=</span> <span style='color:#d2cd86; '>[</span><span style='color:#d2cd86; '>]</span>
+    <span style='color:#e66170; font-weight:bold; '>if</span> newA <span style='color:#e66170; font-weight:bold; '>is</span> None<span style='color:#d2cd86; '>:</span>
+        newA <span style='color:#d2cd86; '>=</span> <span style='color:#d2cd86; '>[</span><span style='color:#d2cd86; '>]</span>
+    <span style='color:#e66170; font-weight:bold; '>if</span> newB <span style='color:#e66170; font-weight:bold; '>is</span> None<span style='color:#d2cd86; '>:</span>
+        newB <span style='color:#d2cd86; '>=</span> <span style='color:#d2cd86; '>[</span><span style='color:#d2cd86; '>]</span>
+
+    <span style='color:#e66170; font-weight:bold; '>if</span> <span style='color:#d2cd86; '>(</span>n <span style='color:#00dddd; '>&lt;</span> <span style='color:#00a800; '>2</span> <span style='color:#e66170; font-weight:bold; '>or</span> m <span style='color:#00dddd; '>&lt;</span> <span style='color:#00a800; '>2</span><span style='color:#d2cd86; '>)</span><span style='color:#d2cd86; '>:</span>
+
+        ED<span style='color:#d2cd86; '>,</span> _A<span style='color:#d2cd86; '>,</span> _B <span style='color:#d2cd86; '>=</span> edit_distanceForDnD<span style='color:#d2cd86; '>(</span>A<span style='color:#d2cd86; '>,</span> B<span style='color:#d2cd86; '>)</span>
+
+        newED<span style='color:#d2cd86; '>.</span>append<span style='color:#d2cd86; '>(</span>ED<span style='color:#d2cd86; '>)</span>
+        <span style='color:#e66170; font-weight:bold; '>for</span> word <span style='color:#e66170; font-weight:bold; '>in</span> _A<span style='color:#d2cd86; '>:</span>
+            newA<span style='color:#d2cd86; '>.</span>append<span style='color:#d2cd86; '>(</span>word<span style='color:#d2cd86; '>)</span>
+        <span style='color:#e66170; font-weight:bold; '>for</span> word <span style='color:#e66170; font-weight:bold; '>in</span> _B<span style='color:#d2cd86; '>:</span>
+            newB<span style='color:#d2cd86; '>.</span>append<span style='color:#d2cd86; '>(</span>word<span style='color:#d2cd86; '>)</span>
+
+    <span style='color:#e66170; font-weight:bold; '>else</span><span style='color:#d2cd86; '>:</span>
+        H <span style='color:#d2cd86; '>=</span> linear_space_Hirshberg<span style='color:#d2cd86; '>(</span>A<span style='color:#d2cd86; '>,</span> B<span style='color:#d2cd86; '>)</span>
+        Divide_and_Conquer_ED<span style='color:#d2cd86; '>(</span>A<span style='color:#d2cd86; '>[</span><span style='color:#d2cd86; '>:</span>H<span style='color:#d2cd86; '>[</span><span style='color:#00a800; '>0</span><span style='color:#d2cd86; '>]</span><span style='color:#d2cd86; '>]</span><span style='color:#d2cd86; '>,</span> B<span style='color:#d2cd86; '>[</span><span style='color:#d2cd86; '>:</span>H<span style='color:#d2cd86; '>[</span><span style='color:#00a800; '>1</span><span style='color:#d2cd86; '>]</span><span style='color:#d2cd86; '>]</span><span style='color:#d2cd86; '>,</span> newED<span style='color:#d2cd86; '>,</span> newA<span style='color:#d2cd86; '>,</span> newB<span style='color:#d2cd86; '>)</span>
+        Divide_and_Conquer_ED<span style='color:#d2cd86; '>(</span>A<span style='color:#d2cd86; '>[</span>H<span style='color:#d2cd86; '>[</span><span style='color:#00a800; '>0</span><span style='color:#d2cd86; '>]</span><span style='color:#d2cd86; '>:</span><span style='color:#d2cd86; '>]</span><span style='color:#d2cd86; '>,</span> B<span style='color:#d2cd86; '>[</span>H<span style='color:#d2cd86; '>[</span><span style='color:#00a800; '>1</span><span style='color:#d2cd86; '>]</span><span style='color:#d2cd86; '>:</span><span style='color:#d2cd86; '>]</span><span style='color:#d2cd86; '>,</span> newED<span style='color:#d2cd86; '>,</span> newA<span style='color:#d2cd86; '>,</span> newB<span style='color:#d2cd86; '>)</span>
+
+    <span style='color:#e66170; font-weight:bold; '>return</span> np<span style='color:#d2cd86; '>.</span><span style='color:#e66170; font-weight:bold; '>sum</span><span style='color:#d2cd86; '>(</span>np<span style='color:#d2cd86; '>.</span>array<span style='color:#d2cd86; '>(</span>newED<span style='color:#d2cd86; '>)</span><span style='color:#d2cd86; '>)</span><span style='color:#d2cd86; '>,</span> newA<span style='color:#d2cd86; '>,</span> newB
+</pre>
+            </div>
+
+
+
+
+        </div>
+        {% endif %}
+    </div>
+
+
+
+</section>
+
+<footer class="footer-5">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 text-center text-md-left mt-2 mb-3 pt-1">
+                <p class="copyright">Copyright &copy; 2017 AlgoCompareED. All rights reserved.</p>
+            </div>
+
+        </div>
+    </div>
+</footer>
+
+<!--JS import-->
+<script src="{{ url_for('static', filename='js/jquery-3.1.1.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/tether.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/customjs.js') }}"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>AlgoCompare</title>
+
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/fzavicon.ico') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/font-awesome.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}" >
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/customdynamic.css') }}" >
+    <link href="https://fonts.googleapis.com/css?family=Droid+Serif:400,400i,700,700i|Montserrat:200,200i,300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+</head>
+<body>
+<section class="cover-5 text-center">
+    <nav class="navbar navbar-expand-lg navbar-light navbar-custom">
+        <div class="container">
+            <a class="navbar-brand" href="/">AlgoCompareED</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse pull-xs-right justify-content-end" id="navbarSupportedContent">
+                <ul class="navbar-nav mt-2 mt-md-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dynamic</a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="/dynamic">With Traceback Matrix</a>
+                            <a class="dropdown-item" href="/dynamicwithouttraceback">Without Traceback Matrix</a>
+                            <!--<a class="dropdown-item" href="/dynamicalternative">Levenshtein Distance</a>-->
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Greedy</a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="/greedy">Fast Approach</a>
+                            <a class="dropdown-item" href="/greedyalternative">LCS Approach</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">D & C</a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="/divideandconquer">D & C v1</a>
+                            <a class="dropdown-item" href="/divideandconquer2">D & C v2</a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/stripek">Stripe</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/recursive">Recursive</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">B & B</a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="/branchandboundwithpath">B&B Path</a>
+                            <a class="dropdown-item" href="/branchandboundwithqueue">B&B Queue</a>
+                        </div>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/proteindb">Protein Database</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="cover-container pb-5 ">
+        <div class="container">
+            <div class="divider"></div>
+            <h3>Protein Database</h3>
+            <div class="divider"></div>
+            <p class="lead ">K Means Clustering</p>
+        </div>
+
+
+        <h4>Clustering Result: For 20% of Data using Dynamic Approach</h4>
+        <div class="divider"></div>
+        <div>
+            <img src="{{ url_for('static', filename = 'images/8.png') }}" style="width:50%">
+        </div>
+        <br>
+        <div>
+            <img src="{{ url_for('static', filename = 'images/10.png') }}" style="width:50%" >
+        </div>
+        <br>
+        <br>
+
+        <h4>Details of Clustering Result: For 20% of Data using Stripe-K Approach</h4>
+        <div class="divider"></div>
+        <div>
+            <img src="{{ url_for('static', filename = 'images/9.png') }}"  style="width:50%">
+        </div>
+        <br>
+        <div>
+            <img src="{{ url_for('static', filename = 'images/11.png') }}" style="width:50%">
+        </div>
+        <br>
+        <br>
+
+        <h4>Details of Clustering Result: For 51% of Data using Stripe-K Approach</h4>
+        <div class="divider"></div>
+        <div>
+            <img src="{{ url_for('static', filename = 'images/12.png') }}" style="width:50%">
+        </div>
+        <br>
+        <div>
+            <img src="{{ url_for('static', filename = 'images/13.png') }}" style="width:50%">
+        </div>
+        <br>
+        <br>
+
+        <h3>Details of Result</h3>
+        <div class="divider"></div>
+
+        <div class="row">
+            <div class="col-md-4 col-feature">
+                <div class="rounded-circle justify-center">
+                    <em class="fa fa-2x fa-clock-o"></em>
+                </div>
+                <h4>Time Taken</h4>
+                <p><h5>More than <b>13</b> hours</h5></p>
+            </div>
+            <div class="col-md-4 col-feature">
+                <div class="rounded-circle justify-center">
+                    <em class="fa fa-2x fa-compass"></em>
+                </div>
+                <h5>Amount of Data Processed</h5>
+                <p><h3>51%</h3></p>
+            </div>
+            <div class="col-md-4 col-feature">
+                <div class="rounded-circle justify-center">
+                    <em class="fa fa-2x fa-code"></em>
+                </div>
+                <h5>Optimality</h5>
+                <p><h3>Not Optimal</h3></p>
+            </div>
+        </div>
+
+
+    </div>
+
+    </div>
+
+
+
+</section>
+
+<footer class="footer-5">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 text-center text-md-left mt-2 mb-3 pt-1">
+                <p class="copyright">Copyright &copy; 2017 AlgoCompareED. All rights reserved.</p>
+            </div>
+
+        </div>
+    </div>
+</footer>
+
+<!--JS import-->
+<script src="{{ url_for('static', filename='js/jquery-3.1.1.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/tether.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/customjs.js') }}"></script>
+
+
+</body>
+</html>

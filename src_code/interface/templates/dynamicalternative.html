@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>AlgoCompare</title>
+
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/fzavicon.ico') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/font-awesome.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}" >
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/customdynamic.css') }}" >
+    <link href="https://fonts.googleapis.com/css?family=Droid+Serif:400,400i,700,700i|Montserrat:200,200i,300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+</head>
+<body>
+<section class="cover-5 text-center">
+    <nav class="navbar navbar-expand-lg navbar-light navbar-custom">
+        <div class="container">
+            <a class="navbar-brand" href="/">AlgoCompareED</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse pull-xs-right justify-content-end" id="navbarSupportedContent">
+                <ul class="navbar-nav mt-2 mt-md-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item dropdown active">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dynamic</a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="/dynamic">With Traceback Matrix</a>
+                            <a class="dropdown-item" href="/dynamicwithouttraceback">Without Traceback Matrix</a>
+                            <!--<a class="dropdown-item" href="/dynamicalternative">Levenshtein Distance</a>-->
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Greedy</a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="/greedy">Fast Approach</a>
+                            <a class="dropdown-item" href="/greedyalternative">LCS Approach</a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/divideandconquer">D & C</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/stripek">Stripe</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/recursive">Recursive</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">B & B</a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="/branchandboundwithpath">B&B Path</a>
+                            <a class="dropdown-item" href="/branchandboundwithqueue">B&B Queue</a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/proteindb">Protein Database</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="cover-container pb-5 ">
+        <div class="container">
+            <div class="divider"></div>
+            <h3>Edit Distance - Dynamic Programming</h3>
+            <div class="divider"></div>
+            <p class="lead ">Levenshtein Distance</p>
+        </div>
+        <div class="container">
+
+            {% if str_A and str_B %}
+            <h5 class="mt-2 mb-4">Algorithm Results for:</h5>
+            {% else %}
+            <h5 class="mt-2 mb-4">Enter two strings below:</h5>
+            {% endif %}
+
+            <form class="submission">
+
+                {% if str_A and str_B %}
+                <table style="border-collapse: collapse;">
+                    <col width="35%">
+                    <col width="5%">
+                    <col width="35%">
+                    <col width="15%">
+
+                    <tr>
+                        <td>
+
+                            <input id="str_A" class="form-control-custom" name="str_A" size="30" type="text" value="{{ str_A }}" disabled/>
+
+                        </td>
+                        <td></td>
+                        <td>
+
+                            <input id="str_B" class="form-control-custom" name="str_B" size="30" type="text" value="{{ str_B }}" disabled/>
+
+                        </td>
+                        <td>
+
+                            <div class="col-sm-4" style=" width: 100%;margin: 0 auto;">
+                                <button  id="dynamicalternativeReset" class="btn btn-lg btn-outline-danger" >Reset</button>
+                            </div>
+
+                        </td>
+                    </tr>
+                </table>
+
+                {% else %}
+
+                <table style="border-collapse: collapse;">
+                    <col width="35%">
+                    <col width="5%">
+                    <col width="35%">
+                    <col width="15%">
+                    <tr>
+                        <td>
+
+                            <input id="str_A" class="form-control-custom" name="str_A" size="30" type="text" placeholder="1st String" required/>
+
+                        </td>
+                        <td></td>
+                        <td>
+                            <input id="str_B" class="form-control-custom" name="str_B" size="30" type="text" placeholder="2nd String" required/>
+                        </td>
+                        <td>
+                            <div class="col-sm-4" style=" width: 50%;margin: 0 auto;">
+                                <button type="submit" id="calcdynamicalternative" class="btn btn-lg btn-outline-success">Calculate Edit Distance</button>
+                            </div>
+                        </td>
+                    </tr>
+
+
+                </table>
+
+                <div id="errormsgdynamic" class="alert alert-danger" style="margin-top:50px;width:100%;display:none;">
+                    <b>Inputs cannot be empty!</b>
+                </div>
+
+
+                {% endif %}
+
+            </form>
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+        </div>
+        {% if str_A and str_B %}
+        <div class="container">
+            <h3>Levenshtein Distance Matrix</h3>
+            <div class="divider"></div>
+
+            <table class="table table-bordered" >
+
+                {% for item2 in EDI[0] %}
+                <col width="{{100/(EDI[0]|length+1)}}%">
+                {% endfor %}
+                <col width="{{100/(EDI[0]|length+1)}}%">
+                <tr>
+                    <td></td>
+                    <td>0</td>
+                    {% for item3 in arr_B %}
+                    <td>{{item3}}</td>
+                    {% endfor %}
+                </tr>
+                {% for item4 in EDI %}
+                <tr>
+                    {% if loop.index <2 %}
+                    <td>0</td>
+                    {% else %}
+                    <td>{{arr_A[loop.index-2]}}</td>
+                    {% endif %}
+
+                    {% for item5 in item4 %}
+                    <td>{{item5}}</td>
+                    {% endfor %}
+                </tr>
+
+                {% endfor %}
+            </table>
+
+            <br>
+            <br>
+            <h3>Details of Result</h3>
+            <div class="divider"></div>
+
+            <div class="row">
+                <div class="col-md-4 col-feature">
+                    <div class="rounded-circle justify-center">
+                        <em class="fa fa-2x fa-clock-o"></em>
+                    </div>
+                    <h4>Time Complexity</h4>
+                    <p><h3><b>0</b>(n<sup>2</sup>)</h3></p>
+                </div>
+                <div class="col-md-4 col-feature">
+                    <div class="rounded-circle justify-center">
+                        <em class="fa fa-2x fa-compass"></em>
+                    </div>
+                    <h4>Edit Distance</h4>
+                    <p><h3>{{edInt}}</h3></p>
+                </div>
+                <div class="col-md-4 col-feature">
+                    <div class="rounded-circle justify-center">
+                        <em class="fa fa-2x fa-code"></em>
+                    </div>
+                    <h4>Optimality</h4>
+                    <p><h3>Optimal</h3></p>
+                </div>
+            </div>
+
+
+
+            <br>
+            <br>
+            <h3>Code (Python)</h3>
+            <div class="divider"></div>
+
+
+            <div style="text-align:left!important">
+<pre style='color:#d1d1d1;background:#000000;'><span style='color:#9999a9; '>#greedy method accepting only charactor values</span>
+<span style='color:#e66170; font-weight:bold; '>def</span> editDistanceGreedy<span style='color:#d2cd86; '>(</span>string1<span style='color:#d2cd86; '>,</span> string2<span style='color:#d2cd86; '>)</span><span style='color:#d2cd86; '>:</span>
+    rnd <span style='color:#d2cd86; '>=</span> <span style='color:#00a800; '>0</span>
+    <span style='color:#e66170; font-weight:bold; '>while</span> <span style='color:#e66170; font-weight:bold; '>len</span><span style='color:#d2cd86; '>(</span>longestSubstringFinder<span style='color:#d2cd86; '>(</span>string1<span style='color:#d2cd86; '>,</span>string2<span style='color:#d2cd86; '>)</span><span style='color:#d2cd86; '>)</span><span style='color:#00dddd; '>></span><span style='color:#00a800; '>1</span><span style='color:#d2cd86; '>:</span>
+        lcs <span style='color:#d2cd86; '>=</span> longestSubstringFinder<span style='color:#d2cd86; '>(</span>string1<span style='color:#d2cd86; '>,</span> string2<span style='color:#d2cd86; '>)</span>
+        string1 <span style='color:#d2cd86; '>=</span> string1<span style='color:#d2cd86; '>.</span>replace<span style='color:#d2cd86; '>(</span>lcs<span style='color:#d2cd86; '>,</span> <span style='color:#e66170; font-weight:bold; '>str</span><span style='color:#d2cd86; '>(</span>rnd<span style='color:#d2cd86; '>)</span><span style='color:#d2cd86; '>)</span>
+        string2 <span style='color:#d2cd86; '>=</span> string2<span style='color:#d2cd86; '>.</span>replace<span style='color:#d2cd86; '>(</span>lcs<span style='color:#d2cd86; '>,</span> <span style='color:#e66170; font-weight:bold; '>str</span><span style='color:#d2cd86; '>(</span>rnd<span style='color:#d2cd86; '>)</span><span style='color:#d2cd86; '>)</span>
+        rnd <span style='color:#00dddd; '>+</span><span style='color:#d2cd86; '>=</span> <span style='color:#00a800; '>1</span>
+
+    <span style='color:#e66170; font-weight:bold; '>return</span> edit_distance_DynamicForGreedy<span style='color:#d2cd86; '>(</span>string1<span style='color:#d2cd86; '>,</span> string2<span style='color:#d2cd86; '>)</span>
+
+
+
+
+
+
+<span style='color:#e66170; font-weight:bold; '>def</span> longestSubstringFinder<span style='color:#d2cd86; '>(</span>string1<span style='color:#d2cd86; '>,</span> string2<span style='color:#d2cd86; '>)</span><span style='color:#d2cd86; '>:</span>
+    answer <span style='color:#d2cd86; '>=</span> <span style='color:#00c4c4; '>""</span>
+    len1<span style='color:#d2cd86; '>,</span> len2 <span style='color:#d2cd86; '>=</span> <span style='color:#e66170; font-weight:bold; '>len</span><span style='color:#d2cd86; '>(</span>string1<span style='color:#d2cd86; '>)</span><span style='color:#d2cd86; '>,</span> <span style='color:#e66170; font-weight:bold; '>len</span><span style='color:#d2cd86; '>(</span>string2<span style='color:#d2cd86; '>)</span>
+    <span style='color:#e66170; font-weight:bold; '>for</span> i <span style='color:#e66170; font-weight:bold; '>in</span> <span style='color:#e66170; font-weight:bold; '>range</span><span style='color:#d2cd86; '>(</span>len1<span style='color:#d2cd86; '>)</span><span style='color:#d2cd86; '>:</span>
+        match <span style='color:#d2cd86; '>=</span> <span style='color:#00c4c4; '>""</span>
+        <span style='color:#e66170; font-weight:bold; '>for</span> j <span style='color:#e66170; font-weight:bold; '>in</span> <span style='color:#e66170; font-weight:bold; '>range</span><span style='color:#d2cd86; '>(</span>len2<span style='color:#d2cd86; '>)</span><span style='color:#d2cd86; '>:</span>
+            <span style='color:#e66170; font-weight:bold; '>if</span> <span style='color:#d2cd86; '>(</span>i <span style='color:#00dddd; '>+</span> j <span style='color:#00dddd; '>&lt;</span> len1 <span style='color:#e66170; font-weight:bold; '>and</span> string1<span style='color:#d2cd86; '>[</span>i <span style='color:#00dddd; '>+</span> j<span style='color:#d2cd86; '>]</span> <span style='color:#00dddd; '>==</span> string2<span style='color:#d2cd86; '>[</span>j<span style='color:#d2cd86; '>]</span><span style='color:#d2cd86; '>)</span><span style='color:#d2cd86; '>:</span>
+                match <span style='color:#00dddd; '>+</span><span style='color:#d2cd86; '>=</span> string2<span style='color:#d2cd86; '>[</span>j<span style='color:#d2cd86; '>]</span>
+            <span style='color:#e66170; font-weight:bold; '>else</span><span style='color:#d2cd86; '>:</span>
+                <span style='color:#e66170; font-weight:bold; '>if</span> <span style='color:#d2cd86; '>(</span><span style='color:#e66170; font-weight:bold; '>len</span><span style='color:#d2cd86; '>(</span>match<span style='color:#d2cd86; '>)</span> <span style='color:#00dddd; '>></span> <span style='color:#e66170; font-weight:bold; '>len</span><span style='color:#d2cd86; '>(</span>answer<span style='color:#d2cd86; '>)</span><span style='color:#d2cd86; '>)</span><span style='color:#d2cd86; '>:</span> answer <span style='color:#d2cd86; '>=</span> match
+                match <span style='color:#d2cd86; '>=</span> <span style='color:#00c4c4; '>""</span>
+    <span style='color:#e66170; font-weight:bold; '>return</span> answer
+
+<span style='color:#e66170; font-weight:bold; '>def</span> edit_distance_DynamicForGreedy<span style='color:#d2cd86; '>(</span>str_A<span style='color:#d2cd86; '>,</span> str_B<span style='color:#d2cd86; '>)</span><span style='color:#d2cd86; '>:</span>
+    A <span style='color:#d2cd86; '>=</span> np<span style='color:#d2cd86; '>.</span>fromstring<span style='color:#d2cd86; '>(</span>str_A<span style='color:#d2cd86; '>,</span> dtype<span style='color:#d2cd86; '>=</span><span style='color:#00c4c4; '>'|S1'</span><span style='color:#d2cd86; '>)</span>
+    B <span style='color:#d2cd86; '>=</span> np<span style='color:#d2cd86; '>.</span>fromstring<span style='color:#d2cd86; '>(</span>str_B<span style='color:#d2cd86; '>,</span> dtype<span style='color:#d2cd86; '>=</span><span style='color:#00c4c4; '>'|S1'</span><span style='color:#d2cd86; '>)</span>
+    n <span style='color:#d2cd86; '>=</span> A<span style='color:#d2cd86; '>.</span>size
+    m <span style='color:#d2cd86; '>=</span> B<span style='color:#d2cd86; '>.</span>size
+    ED <span style='color:#d2cd86; '>=</span> np<span style='color:#d2cd86; '>.</span>zeros<span style='color:#d2cd86; '>(</span><span style='color:#d2cd86; '>(</span>n <span style='color:#00dddd; '>+</span> <span style='color:#00a800; '>1</span><span style='color:#d2cd86; '>,</span> m <span style='color:#00dddd; '>+</span> <span style='color:#00a800; '>1</span><span style='color:#d2cd86; '>)</span><span style='color:#d2cd86; '>,</span> dtype<span style='color:#d2cd86; '>=</span><span style='color:#00c4c4; '>'int32'</span><span style='color:#d2cd86; '>)</span>
+
+    <span style='color:#e66170; font-weight:bold; '>for</span> i <span style='color:#e66170; font-weight:bold; '>in</span> <span style='color:#e66170; font-weight:bold; '>range</span><span style='color:#d2cd86; '>(</span>m <span style='color:#00dddd; '>+</span> <span style='color:#00a800; '>1</span><span style='color:#d2cd86; '>)</span><span style='color:#d2cd86; '>:</span>
+        ED<span style='color:#d2cd86; '>[</span><span style='color:#00a800; '>0</span><span style='color:#d2cd86; '>,</span> i<span style='color:#d2cd86; '>]</span> <span style='color:#d2cd86; '>=</span> i
+
+    <span style='color:#e66170; font-weight:bold; '>for</span> j <span style='color:#e66170; font-weight:bold; '>in</span> <span style='color:#e66170; font-weight:bold; '>range</span><span style='color:#d2cd86; '>(</span>n <span style='color:#00dddd; '>+</span> <span style='color:#00a800; '>1</span><span style='color:#d2cd86; '>)</span><span style='color:#d2cd86; '>:</span>
+        ED<span style='color:#d2cd86; '>[</span>j<span style='color:#d2cd86; '>,</span> <span style='color:#00a800; '>0</span><span style='color:#d2cd86; '>]</span> <span style='color:#d2cd86; '>=</span> j
+
+    <span style='color:#e66170; font-weight:bold; '>for</span> k <span style='color:#e66170; font-weight:bold; '>in</span> <span style='color:#e66170; font-weight:bold; '>range</span><span style='color:#d2cd86; '>(</span><span style='color:#00a800; '>1</span><span style='color:#d2cd86; '>,</span> n <span style='color:#00dddd; '>+</span> <span style='color:#00a800; '>1</span><span style='color:#d2cd86; '>)</span><span style='color:#d2cd86; '>:</span>
+        <span style='color:#e66170; font-weight:bold; '>for</span> l <span style='color:#e66170; font-weight:bold; '>in</span> <span style='color:#e66170; font-weight:bold; '>range</span><span style='color:#d2cd86; '>(</span><span style='color:#00a800; '>1</span><span style='color:#d2cd86; '>,</span> m <span style='color:#00dddd; '>+</span> <span style='color:#00a800; '>1</span><span style='color:#d2cd86; '>)</span><span style='color:#d2cd86; '>:</span>
+            <span style='color:#e66170; font-weight:bold; '>if</span> A<span style='color:#d2cd86; '>[</span>k <span style='color:#00dddd; '>-</span> <span style='color:#00a800; '>1</span><span style='color:#d2cd86; '>]</span> <span style='color:#00dddd; '>==</span> B<span style='color:#d2cd86; '>[</span>l <span style='color:#00dddd; '>-</span> <span style='color:#00a800; '>1</span><span style='color:#d2cd86; '>]</span><span style='color:#d2cd86; '>:</span>
+                ED<span style='color:#d2cd86; '>[</span>k<span style='color:#d2cd86; '>,</span> l<span style='color:#d2cd86; '>]</span> <span style='color:#d2cd86; '>=</span> ED<span style='color:#d2cd86; '>[</span>k <span style='color:#00dddd; '>-</span> <span style='color:#00a800; '>1</span><span style='color:#d2cd86; '>,</span> l <span style='color:#00dddd; '>-</span> <span style='color:#00a800; '>1</span><span style='color:#d2cd86; '>]</span>
+
+            <span style='color:#e66170; font-weight:bold; '>else</span><span style='color:#d2cd86; '>:</span>
+                ED<span style='color:#d2cd86; '>[</span>k<span style='color:#d2cd86; '>,</span> l<span style='color:#d2cd86; '>]</span> <span style='color:#d2cd86; '>=</span> <span style='color:#e66170; font-weight:bold; '>min</span><span style='color:#d2cd86; '>(</span>ED<span style='color:#d2cd86; '>[</span>k <span style='color:#00dddd; '>-</span> <span style='color:#00a800; '>1</span><span style='color:#d2cd86; '>,</span> l <span style='color:#00dddd; '>-</span> <span style='color:#00a800; '>1</span><span style='color:#d2cd86; '>]</span><span style='color:#d2cd86; '>,</span> ED<span style='color:#d2cd86; '>[</span>k<span style='color:#d2cd86; '>,</span> l <span style='color:#00dddd; '>-</span> <span style='color:#00a800; '>1</span><span style='color:#d2cd86; '>]</span><span style='color:#d2cd86; '>,</span> ED<span style='color:#d2cd86; '>[</span>k <span style='color:#00dddd; '>-</span> <span style='color:#00a800; '>1</span><span style='color:#d2cd86; '>,</span> l<span style='color:#d2cd86; '>]</span><span style='color:#d2cd86; '>)</span> <span style='color:#00dddd; '>+</span> <span style='color:#00a800; '>1</span>
+
+    <span style='color:#e66170; font-weight:bold; '>return</span> ED<span style='color:#d2cd86; '>[</span>n<span style='color:#d2cd86; '>,</span> m<span style='color:#d2cd86; '>]</span>  <span style='color:#9999a9; '># edit distance</span>
+</pre>
+            </div>
+
+
+
+
+        </div>
+        {% endif %}
+    </div>
+
+
+
+</section>
+
+<footer class="footer-5">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 text-center text-md-left mt-2 mb-3 pt-1">
+                <p class="copyright">Copyright &copy; 2017 AlgoCompareED. All rights reserved.</p>
+            </div>
+
+        </div>
+    </div>
+</footer>
+
+<!--JS import-->
+<script src="{{ url_for('static', filename='js/jquery-3.1.1.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/tether.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/customjs.js') }}"></script>
+
+
+</body>
+</html>
