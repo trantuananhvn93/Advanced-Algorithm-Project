@@ -14,6 +14,14 @@ Program different algorithms for the ED problem, including:
 size k around the diagonal of the matrix
 - An approximated version based on a greedy approach 
 
+## Data
+[link download](http://forge.info.univ-angers.fr/~gh/Shspdb/index.php?action=0&mode=0)
+**Description** (for format excel only)
+- 1st column: name
+- 2nd column: length of protein sequence
+- 3rd column: class
+- 4th column: protein sequence
+
 ## Methodology & Results
 [Report link](https://github.com/trantuananhvn93/Advanced-Algorithm-Project/blob/master/Advanced_Algorithms_Report.pdf)
 
