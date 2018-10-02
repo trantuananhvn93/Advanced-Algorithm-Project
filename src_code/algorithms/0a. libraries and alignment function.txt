@@ -1,0 +1,49 @@
+import numpy as np
+import datetime as d
+import math
+import queue
+import time
+from random import randint
+import matplotlib.pyplot as plt
+
+def alignment(A, B, ptr, L=None):
+        
+    # create a trackback line
+    if L is None:
+        L = []
+        row = ptr.shape[0] - 1
+        col = ptr.shape[1] - 1
+        while (row!=0 or col!=0):
+            if (ptr[row,col] == 1)  or  (ptr[row,col] == 7):
+                L.append('D')
+                row = row - 1
+                col = col - 1
+            elif (ptr[row,col] == 4) or (ptr[row,col] == 5) or (ptr[row,col] == 6):
+                L.append('U')
+                row = row - 1
+            elif (ptr[row,col] == 2) or (ptr[row,col] == 3):
+                L.append('L')
+                col = col - 1
+            
+
+    #Update A and B with alignment
+    A2 = []
+    B2 = []
+    k = 0
+    h = 0
+    for i in range(len(L), 0, -1):
+        if L[i-1] == 'D':
+            A2.append(A[k])
+            B2.append(B[h])
+            k += 1
+            h += 1
+        elif L[i-1] == 'U':
+            A2.append(A[k])
+            B2.append('-')
+            k += 1
+        elif L[i-1] == 'L':
+            A2.append('-')
+            B2.append(B[h])
+            h += 1
+
+    return ''.join(A2), ''.join(B2) 

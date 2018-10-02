@@ -1,0 +1,82 @@
+def divide_and_conquer_version1(A,B):
+    
+    def linear_space_Hirshberg(A,B):
+        n = len(A)
+        m = len(B)
+
+        # position to divide String A
+        h = round(n/2)    
+        # init ED 1D array
+        ED = np.zeros((m+1), dtype='int32')
+        # init Hirshberg 1D array
+        H = np.zeros((m+1), dtype='int32')
+
+
+        for j in range(m+1):
+            ED[j] = j
+
+
+        for i in range(1, n+1):
+            #set up the left and Diagonal value of ED on each new row
+            left = i
+            dag = i-1
+            #Left and Diagonal value of H on each new row
+            H_left = 0
+            H_dag = 0
+            for j in range(1, m+1):
+                #Compute ED
+                diff = 0 if A[i-1] == B[j-1] else 1
+                curr = min(ED[j] + 1, left + 1, dag + diff)
+                #Compute Array 1D H thanks to result of ED
+                if i == h:
+                    H[j] = j 
+                if (i > h):
+                    if (curr == left + 1):
+                        H_curr = H_left
+                    elif (curr == ED[j] + 1):
+                        H_curr = H[j]
+                    else:
+                        H_curr = H_dag
+                    #Update new value of left, dag and curr
+                    H_left = H_curr
+                    H_dag = H[j]
+                    H[j] = H_curr
+                #Update ED array     
+                left = curr
+                dag = ED[j]
+                ED[j] = curr
+
+        return np.array([h,H[m]], dtype='int32')
+    
+    
+    def Divide_and_Conquer(A, B, newED=None, newA=None, newB=None):
+        n = len(A)
+        m = len(B)
+
+        #global lists:
+        if newED is None:
+            newED = []
+        if newA is None:
+            newA = []
+        if newB is None:
+            newB = []
+
+        if (n < 2 or m < 2 ):
+
+            ED, _A, _B = edit_distance(A, B)
+
+            newED.append(ED)
+            for word in _A:
+                newA.append(word )
+            for word in _B:
+                newB.append(word)
+
+        else:
+            H = linear_space_Hirshberg(A, B) 
+            Divide_and_Conquer(A[:H[0]], B[:H[1]], newED, newA, newB)
+            Divide_and_Conquer(A[H[0]:], B[H[1]:], newED, newA, newB)
+
+        return np.sum(np.array(newED)), ''.join(newA), ''.join(newB)
+    
+    ed, _A, _B = Divide_and_Conquer(A,B)
+    return ed, _A, _B

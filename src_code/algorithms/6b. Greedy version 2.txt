@@ -1,0 +1,56 @@
+import numpy as np
+import datetime as d
+import math
+import string
+import random
+
+
+#greedy method accepting only charactor values
+def editDistanceGreedy(string1, string2):
+    rnd = 0
+    while len(longestSubstringFinder(string1,string2))>1:
+        lcs = longestSubstringFinder(string1, string2)
+        string1 = string1.replace(lcs, str(rnd))
+        string2 = string2.replace(lcs, str(rnd))
+        rnd += 1
+
+    return edit_distance_DynamicForGreedy(string1, string2)
+
+
+def longestSubstringFinder(string1, string2):
+    answer = ""
+    len1, len2 = len(string1), len(string2)
+    for i in range(len1):
+        match = ""
+        for j in range(len2):
+            if (i + j < len1 and string1[i + j] == string2[j]):
+                match += string2[j]
+            else:
+                if (len(match) > len(answer)): answer = match
+                match = ""
+    return answer
+
+def edit_distance_DynamicForGreedy(str_A, str_B):
+    A = np.fromstring(str_A, dtype='|S1')
+    B = np.fromstring(str_B, dtype='|S1')
+    n = A.size
+    m = B.size
+    ED = np.zeros((n + 1, m + 1), dtype='int32')
+
+    for i in range(m + 1):
+        ED[0, i] = i
+
+    for j in range(n + 1):
+        ED[j, 0] = j
+
+    for k in range(1, n + 1):
+        for l in range(1, m + 1):
+            if A[k - 1] == B[l - 1]:
+                ED[k, l] = ED[k - 1, l - 1]
+
+            else:
+                ED[k, l] = min(ED[k - 1, l - 1], ED[k, l - 1], ED[k - 1, l]) + 1
+
+    return ED[n, m]  # edit distance
+
+

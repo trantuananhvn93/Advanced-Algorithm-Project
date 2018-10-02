@@ -1,0 +1,103 @@
+def divide_conquer_version2(A, B):
+    
+    def edit_distance_forward(A, B):
+        n = len(A)
+        m = len(B) 
+        ED = np.zeros((m+1), dtype='int32')
+
+        for j in range(m+1):
+            ED[j] = j
+
+        for i in range(1, n+1 ):
+            left = i
+            dag = i-1
+            for j in range(1, m+1):
+                #MATRIX ED
+                diff = 0 if A[i-1] == B[j-1] else 1
+                curr = min(ED[j] + 1, left + 1, dag + diff)
+                left = curr
+                dag = ED[j]
+                ED[j] = curr
+
+        return ED
+
+    def edit_distance_backward(A, B):
+        n = len(A)
+        m = len(B) 
+
+        ED = np.zeros((m+1), dtype='int32')
+
+        for j in range(m, -1, -1):
+            ED[j] = m - j
+
+        for i in range(n-1, -1 , -1):
+            left = n-i
+            dag = n-i-1
+            for j in range(m-1, -1, -1):
+                #MATRIX ED
+                diff = 0 if A[i] == B[j] else 1
+                curr = min(ED[j] + 1, left + 1, dag + diff)
+                left = curr
+                dag = ED[j]
+                ED[j] = curr
+
+        return ED
+
+    def find_min_point(row):
+        
+        #find the minimal value of the row
+        min_value = min(row)
+        #find index of all minimums
+        min_index = np.where(row == min_value)[0]
+        
+        return min_index[0]
+
+    def Hirshberg(A,B):
+        n = len(A)
+        m = len(B)
+
+        # position to divide String A
+        h = int(n/2) 
+
+        ED_forward = edit_distance_forward(A[:h], B)
+        ED_backward = edit_distance_backward(A[h-1:], B)
+
+        # Adding corresponding elements of these two rows h
+        row_h = ED_forward[1:] + ED_backward[:-1]
+
+        # position to divide String B
+        h2 = find_min_point(row_h) + 1
+
+        return np.array([h, h2], dtype='int32')
+
+    def Divide_and_Conquer(A, B, newED=None, newA=None, newB=None):
+        n = len(A)
+        m = len(B)
+
+        #global lists:
+        if newED is None:
+            newED = []
+        if newA is None:
+            newA = []
+        if newB is None:
+            newB = []
+
+        if (n < 2 or m < 2 ):
+
+            ED, _A, _B = edit_distance(A, B)
+
+            newED.append(ED)
+            for word in _A:
+                newA.append(word )
+            for word in _B:
+                newB.append(word)
+
+        else:
+            H = Hirshberg(A, B)
+            Divide_and_Conquer(A[:H[0]], B[:H[1]], newED, newA, newB)
+            Divide_and_Conquer(A[H[0]:], B[H[1]:], newED, newA, newB)
+
+        return np.sum(np.array(newED)), ''.join(newA), ''.join(newB)
+    
+    ed, _A, _B = Divide_and_Conquer(A,B)
+    return ed, _A, _B

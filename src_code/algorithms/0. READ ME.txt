@@ -1,0 +1,14 @@
+File "0a.libraries and alignment function" contains all libraries we used for ALL algorithms 
+and an alignment function used for "1.a Dynamic Programming", "2.a Divide and Conquer version 1", 
+"2.b Divide and Conquer version 2", "4b. Branch and Bound version 2", and "5. Stripe K".
+
+Files : "3.Pure recursive" and "4a.Branch and Bound version 1" use their own alignment function.
+
+Be attention: For greedy algorithms we didn't make any alignment function!
+
+File "0b.test" will give you some ideas how to test the algorithms.
+
+file "7. KMEAN cluster protein data" contains all codes to extract data and cluster it.
+the code is based on K-Means strategy but already modified for the case of non-euclidean features.
+
+ 

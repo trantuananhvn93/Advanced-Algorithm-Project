@@ -1,0 +1,99 @@
+def h(a,b):
+    return abs(len(a)-len(b))   #This corresponds to h in f=g*+h seen in the courses, that return the "at least needed operations to reach goal" for a given node
+ 
+ 
+def cutoff(a,b,bound, cumulcost): #This is the function that indicates if we have or not to prune a node and his subtree
+    if cumulcost+h(a,b)>= bound :
+        return True
+    else:
+        return False
+
+
+def ed_bb(a, b, cumulcost=0, path=[], bound=None):
+
+#The function return a tuple (value of distance, path to follow (left,mid,right, at each step) to reach a solution)
+#We browse the tree in depth first search 
+#In each step we can choose 3 branches :
+#The two ones that respectively indicates to look at (a[:-1],b) and (a,b[:-1]) and cost one
+#The last one that indicate to look for (a[:-1],b[:-1]), cost zero or one
+
+    
+    if bound is None:
+        bound = []
+        bound.append(987654321) #As the bound can't be used as a local int variable in this algorithm, I used this trick (to avoid to define a global variable)
+            
+    if a == "":
+        if cumulcost+len(b)<bound[0]:
+            bound[0]=cumulcost+len(b) # When reaching a solution, we check if the cost is lesser than current bound, and if so we update the bound
+        return (len(b), path + ['m']*len(b))  
+ 
+    if b == "":
+        if cumulcost+len(a)<bound[0]:
+           bound[0]=cumulcost+len(a)
+        return (len(a), path + ['g']*len(a))
+   
+    if a[-1] == b[-1]:
+        cost = 0
+    else:
+        cost = 1
+ 
+    if cutoff(a,b, bound[0], cumulcost)==False:
+        gauche = ed_bb(a[:-1], b, cumulcost+1, path + ['g'], bound) #The steps here are classical as in the recursive way
+        gauche = (gauche[0] + 1, gauche[1])
+       
+        milieu = ed_bb(a, b[:-1], cumulcost+1, path + ['m'], bound)
+        milieu = (milieu[0] + 1, milieu[1])
+
+        droite = ed_bb(a[:-1], b[:-1],cumulcost+cost, path + ['d'], bound)
+        droite = (droite[0] + cost, droite[1])
+ 
+        res = min([gauche, milieu, droite], key=lambda x: x[0])
+ 
+        return res
+ 
+    else:
+        return (123456789, path) #This permits to return an (int,path) in every case, otherwise, the function cannot works. Moreother if we reach this step it means that cutoff occured, so first we don't make recursive call, and second we return a very big number that cannot be the min of the compared paths
+
+
+def alignment(a,b):
+
+    A=[]
+    B=[]
+    AA=[] #Simply will containt characters of string a
+    BB=[] #Simply will containt characters of string b
+    i=0
+    while i<len(a):
+        AA.append(a[i]) ; i+=1
+    i=0
+    while i<len(b):
+        BB.append(b[i]) ; i+=1
+
+
+    path=ed_bb(a,b)[1]                 
+    path.reverse() #We reverse path because it is more conveniant for indexation
+    
+    for i in range(len(path)):
+
+        if path[i]=='g':
+            B.append('*')
+        else:
+            B.append(BB[0]) ; del BB[0]
+        if path[i]=='m':
+            A.append('*') 
+        else :
+            A.append(AA[0]) ; del AA[0]
+    return (A,B)
+
+
+alignment("hhABhzCD", "ABCDEFg")
+
+
+
+def ed_bb_with_path_and_alignment(a,b):
+    return (ed_bb(a,b), alignment(a,b))
+
+
+#print ed_bb_with_path_and_alignment("altruistic", "algorithm")
+
+
+

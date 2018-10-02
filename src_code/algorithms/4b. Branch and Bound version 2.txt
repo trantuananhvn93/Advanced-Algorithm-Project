@@ -1,0 +1,52 @@
+class Node:
+    def __init__(self, A, B, cost):
+        self.A = A
+        self.B = B
+        self.cost = cost
+        self.h = heuristic(self.A, self.B) 
+        self.f = self.cost + self.h 
+        self.path = ''
+        
+def heuristic(A, B):
+    return (abs(len(A) - len(B)))
+
+def Branch_and_Bound_version2(A,B):
+    
+    Q = queue.LifoQueue()
+    node0 = Node(A,B,0)
+    bound = math.inf    
+    Q.put(node0)
+    path = ''
+    
+    while(Q.empty()==False):
+        node = Q.get()
+        
+        #if the node can be expanded:
+        if(len(node.A) != 0 and len(node.B)!= 0):
+            #expand to three new nodes
+            diff = 0 if node.A[-1] == node.B[-1] else 1
+            nextNodes = []
+            nextNodes.append(Node(node.A[:-1], node.B, node.cost + 1))
+            nextNodes.append(Node(node.A, node.B[:-1],  node.cost + 1))
+            nextNodes.append(Node(node.A[:-1], node.B[:-1], node.cost + diff))
+            #update the path of nodes
+            nextNodes[0].path = node.path + 'U'
+            nextNodes[1].path = node.path + 'L'
+            nextNodes[2].path = node.path + 'D'
+            
+            #if the value of node higher than the bound, so cutoff, otherwise put it into the queue to expande next time
+            for _node in nextNodes:
+                if _node.f <= bound:
+                    Q.put(_node)
+                    
+        #if solution is found, the node cannot be expanded:        
+        elif(len(node.A) == 0 or len(node.B)== 0):
+            #update the bound if higher than the value of the final node (solution), 
+            #and also update the path leading the new solution
+            if bound >= node.f:
+                path = node.path + len(node.B)*'L' + len(node.A)*'U'
+                bound = node.f
+                               
+                
+    _A, _B = alignment(A, B, None, path)
+    return bound, _A, _B

@@ -1,0 +1,42 @@
+#String to test
+str_A = "ALTRUISTIC"
+str_B = "ALGORITHM" 
+
+#Dynamic Programming
+ED, _A, _B  = edit_distance(str_A, str_B)
+print("ED using basic method:", ED, "\nResulting alignment: \n",  _A, "\n", _B)
+
+ED, _A, _B  = edit_distance_different_traceback(str_A, str_B)
+print("ED using different trace back method:", ED, "\nResulting alignment: \n",  _A, "\n", _B)
+
+#Divide and Conquer version 1
+ED, _A, _B = divide_and_conquer_version1(str_A, str_B)
+print("ED using divide and conquer version 1 = ",ED,"\nResulting Alignment: \n", _A, "\n", _B)
+
+#Divide and Conquer version 2
+ED, _A, _B = divide_conquer_version2(str_A, str_B)
+print("ED using divide and conquer version 2 = ", ED,"\nResulting Alignment: \n", _A, "\n", _B)
+
+#Pure recursive method
+result = ed_with_path_and_alignment(str_A, str_B)
+print("ED using pure recursive method :", result[0][0], "\nAlignments:\n" ,''.join(result[1][0]), "\n", ''.join(result[1][1]))
+
+# Branch and bound version 1
+result = ed_bb_with_path_and_alignment(str_A, str_B)
+print("ED using b&b version 1 :", result[0][0], "\nAlignments:\n" ,''.join(result[1][0]), "\n", ''.join(result[1][1]))
+
+#Branch and bound version 2
+ED, _A, _B  = Branch_and_Bound_version2(str_A, str_B)
+print("ED using B&B method--version2:", ED, "\nAlignment resulting:\n", _A, "\n", _B)
+
+#Stripe K
+ED, _A, _B  = stripe_edit_distance(str_A, str_B)
+print("ED using stripe K method:", ED, "\nResulting alignment: \n",  _A, "\n",  _B)
+
+#Greedy version 1:
+ED = ed_greedy(str_A, str_B)
+print("ED using greedy version 1:", ED)
+
+#Greedy version 2:
+ED = editDistanceGreedy(str_A, str_B)
+print("ED using greedy version 2:", ED)

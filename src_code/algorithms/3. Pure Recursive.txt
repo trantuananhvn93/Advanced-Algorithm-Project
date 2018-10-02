@@ -1,0 +1,70 @@
+def ed(a, b,path=[]):
+    
+#The function return a tuple (value of distance, path to follow (left,mid,right, at each step) to reach a solution)  
+    
+    if a == "":
+        return (len(b), path + ['m']*len(b))  
+ 
+    if b == "":
+        return (len(a), path + ['g']*len(a))
+   
+    if a[-1] == b[-1]:
+        cost = 0
+    else:
+        cost = 1
+ 
+   
+    gauche = ed(a[:-1], b, path + ['g'])
+    gauche = (gauche[0] + 1, gauche[1])
+       
+    milieu = ed(a, b[:-1],path + ['m'])
+    milieu = (milieu[0] + 1, milieu[1])
+
+    droite = ed(a[:-1], b[:-1], path + ['d'])
+    droite = (droite[0] + cost, droite[1])
+ 
+    res = min([gauche, milieu, droite], key=lambda x: x[0])
+ 
+    return res
+ 
+
+
+
+
+def alignment(a,b):
+
+    A=[] 
+    B=[]
+    AA=[] #Simply will containt characters of string a
+    BB=[] #Simply will containt characters of string b
+    i=0
+    while i<len(a):
+        AA.append(a[i]) ; i+=1
+    i=0
+    while i<len(b):
+        BB.append(b[i]) ; i+=1
+
+
+    path=ed(a,b)[1]                 
+    path.reverse() #We reverse path because it is more conveniant for indexation
+    
+    for i in range(len(path)):
+
+        if path[i]=='g':
+            B.append('*')
+        else:
+            B.append(BB[0]) ; del BB[0]
+        if path[i]=='m':
+            A.append('*') 
+        else :
+            A.append(AA[0]) ; del AA[0]
+    return (A,B)
+
+
+
+
+def ed_with_path_and_alignment(a,b):
+    return (ed(a,b), alignment(a,b))
+
+
+#print ed_with_path_and_alignment("hhABhzCD", "ABCDEFg")

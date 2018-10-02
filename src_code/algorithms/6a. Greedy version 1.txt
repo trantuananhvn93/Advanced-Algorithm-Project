@@ -1,0 +1,17 @@
+def ed_greedy(a,b):
+    value=0
+
+    if len(a)>len(b):
+        for i in range(len(b)):
+            if (a[-1-i])!=(b[-1-i]):
+                value+=1 
+        value+=len(a)-len(b)
+
+    else: 
+        for i in range(len(a)):
+            if (a[-1-i])!=(b[-1-i]):
+                value+=1 
+        value+=len(b)-len(a)
+        
+
+    return value

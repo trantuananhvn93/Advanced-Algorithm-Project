@@ -1,0 +1,151 @@
+import pandas as pd
+import numpy as np
+import math
+import time
+import matplotlib.pyplot as plt
+import random
+
+
+#read data from csv file
+data = pd.read_csv("data_protein.csv", header=None)
+#Rename all columns
+data.columns = ['Name','Length','Class','Sequence']
+#top 10 rows
+data.iloc[:10,]
+
+# extract 20% data for the test
+df2 = data.sample(frac=0.2)
+# remove class 99
+df2 = df2[df2['Class'] != 99]
+# refresh index
+df2 = df2.reset_index(drop=True)
+df2
+
+#use tripe K method like a levenshtein function
+def levenshtein(A, B):
+
+    n = len(A)
+    m = len(B)
+           
+    if(n==0 or m==0):
+        return n+m
+    
+    else:
+        ED = np.empty((n+1,m+1))
+        ED[:] = math.inf #infinity
+        
+        # auto set up the threshold K
+        k = 1    
+        while(abs(n-m) > k):
+            k += 1
+        
+        for j in range(m+1):
+            if j < k+1:
+                ED[0,j] = j
+                
+        for i in range(n+1):
+            if i < k+1:
+                ED[i,0] = i
+                
+        for i in range(1, n+1):
+            # set up the threshold window
+            a = max(1, i-k)
+            b = min(m+1, i+k+1)
+
+            for j in range(a, b):
+                #MATRIX ED
+                diff = 0 if A[i-1] == B[j-1] else 1
+                ED[i,j] = min(ED[i-1,j] + 1, ED[i, j-1] + 1, ED[i-1,j-1] + diff)
+
+                 
+    return ED[n,m]
+
+def update_clusters(df, k, centroids_ix):
+    
+#     length = len(df.index)
+    
+    #New column for the clustering
+    Cluster = np.zeros((len(df.index)), dtype='int32')
+    
+    for i in range(len(df.index)):
+
+        if i in centroids_ix:
+#             Cluster[i] = centroids_ix.index(i) + 1
+            Cluster[i] = np.where(centroids_ix == i)[0] + 1
+        else:
+            #Create a matrix ED
+            D = np.zeros((k), dtype='int32')
+
+            #Compute ED from each sequence to all centroids
+            for j in range(len(centroids_ix)):
+                D[j] = levenshtein(df.iloc[i,3], df.iloc[centroids_ix[j],3])
+
+            #Update class of protein sequence
+            Cluster[i] = np.argmin(D) + 1
+    return Cluster
+
+def find_new_centroids(df, k, Cluster):
+    new_centroids_ix = np.zeros((k), dtype='int32')
+    for i in range(k):
+        cluster_ix = df.loc[Cluster == (i+1), 'Sequence'].index
+        n = len(cluster_ix)
+        if n > 1:
+            #Creat a matrix Levenshtein distance of the cluster
+            M = np.zeros((n, n), dtype='int32')
+            mean_distance = np.zeros((n))
+            for p in range(0, n):
+                for q in range(p+1, n):
+                    M[p,q] = levenshtein(df.loc[cluster_ix[p],'Sequence'], df.loc[cluster_ix[q], 'Sequence'])
+                # compute the mean of distances between one to others
+                mean_distance[p] = round((M[p,:].sum() + M[:p,p].sum()) / (n-1), 2)
+            #find the sequence minimizing the mean distance and make it to the new centroid
+            new_centroids_ix[i] = cluster_ix[np.argmin(mean_distance)]
+        else:
+            new_centroids_ix[i] = cluster_ix[0]
+    return new_centroids_ix
+        
+def rearrangement(old_centroids_ix, new_centroids_ix):
+          
+    #calculate number of changed centroids
+    count = 0
+    for i in range(len(old_centroids_ix)):
+        if old_centroids_ix[i] != new_centroids_ix[i]:
+            count += 1
+            
+    return count                                               
+
+def k_mean(df, k, cutoff):
+    # init randomly k centroids index
+    centroids_ix = sorted(random.sample(range(len(df.index)), k))
+    centroids_ix = np.array(centroids_ix, dtype='int32')
+    
+    while True:
+        #update cluster
+        Cluster = update_clusters(df, k, centroids_ix)
+        #find new centroids
+        new_centroids_ix = find_new_centroids(df, k, Cluster)
+        #calculate the shift
+        shift = rearrangement(centroids_ix, new_centroids_ix)
+                
+        # if the number of rearrangement is lower than cutoff, break
+        # otherwise update centroids
+        if shift <= cutoff:
+            print("Done!")
+            break
+        else:
+            centroids_ix = new_centroids_ix
+            
+        
+    
+    return Cluster
+
+
+t0 = time.time()
+Cluster = k_mean(df2, 21, 0)
+t1 = time.time()
+
+
+print("time:", round(t1 - t0, 2))
+np.set_printoptions(threshold=np.nan)
+print( Cluster, '\n', df2.Class.values)
+        
