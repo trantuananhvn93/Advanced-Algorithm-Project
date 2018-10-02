@@ -1,0 +1,4 @@
+tr:first-child td, tr td:first-child {
+    font-weight: bold;
+}
+
